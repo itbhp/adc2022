@@ -1,8 +1,18 @@
 package it.twinsbrain.adc2022.day02;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
+
 public class Day02Solution {
+
+    public static void main(String[] args) throws URISyntaxException {
+        var input = read(resource("/day02/input02.txt"));
+        System.out.printf("Score: %d", score(input));
+        System.out.println();
+    }
 
     private static final int FIRST_PLAYER = 0;
     private static final int SECOND_PLAYER = 1;

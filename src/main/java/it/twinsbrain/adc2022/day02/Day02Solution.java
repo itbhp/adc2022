@@ -81,18 +81,18 @@ public class Day02Solution {
     }
 }
 
-sealed abstract class Move {
-    abstract Result winOver(Move other);
+sealed interface Move {
+    Result winOver(Move other);
 
-    abstract Move opponentMoveGiven(Result opponentResult);
+    Move opponentMoveGiven(Result opponentResult);
 
-    abstract int points();
+    int points();
 }
 
 @SuppressWarnings("unused")
-final class Rock extends Move {
+final class Rock implements Move {
     @Override
-    Result winOver(Move other) {
+    public Result winOver(Move other) {
         return switch (other) {
             case Rock r -> Result.Draw;
             case Paper p -> Result.Lost;
@@ -101,7 +101,7 @@ final class Rock extends Move {
     }
 
     @Override
-    Move opponentMoveGiven(Result opponentResult) {
+    public Move opponentMoveGiven(Result opponentResult) {
         return switch (opponentResult) {
             case Won -> new Paper();
             case Draw -> new Rock();
@@ -110,15 +110,15 @@ final class Rock extends Move {
     }
 
     @Override
-    int points() {
+    public int points() {
         return 1;
     }
 }
 
 @SuppressWarnings("unused")
-final class Paper extends Move {
+final class Paper implements Move {
     @Override
-    Result winOver(Move other) {
+    public Result winOver(Move other) {
         return switch (other) {
             case Rock r -> Result.Won;
             case Paper p -> Result.Draw;
@@ -127,7 +127,7 @@ final class Paper extends Move {
     }
 
     @Override
-    Move opponentMoveGiven(Result opponentResult) {
+    public Move opponentMoveGiven(Result opponentResult) {
         return switch (opponentResult) {
             case Won -> new Scissor();
             case Draw -> new Paper();
@@ -136,15 +136,15 @@ final class Paper extends Move {
     }
 
     @Override
-    int points() {
+    public int points() {
         return 2;
     }
 }
 
 @SuppressWarnings("unused")
-final class Scissor extends Move {
+final class Scissor implements Move {
     @Override
-    Result winOver(Move other) {
+    public Result winOver(Move other) {
         return switch (other) {
             case Rock r -> Result.Lost;
             case Paper p -> Result.Won;
@@ -153,7 +153,7 @@ final class Scissor extends Move {
     }
 
     @Override
-    Move opponentMoveGiven(Result opponentResult) {
+    public Move opponentMoveGiven(Result opponentResult) {
         return switch (opponentResult) {
             case Won -> new Rock();
             case Draw -> new Scissor();
@@ -162,7 +162,7 @@ final class Scissor extends Move {
     }
 
     @Override
-    int points() {
+    public int points() {
         return 3;
     }
 }

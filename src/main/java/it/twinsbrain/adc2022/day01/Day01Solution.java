@@ -4,7 +4,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 
 import static it.twinsbrain.adc2022.FilesModule.read;
 import static it.twinsbrain.adc2022.FilesModule.resource;

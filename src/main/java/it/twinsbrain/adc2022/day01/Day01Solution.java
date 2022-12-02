@@ -4,6 +4,6 @@ import java.util.List;
 
 public class Day01Solution {
     public static int maxCalories(List<String> input){
-        return Integer.parseInt(input.get(0));
+        return input.stream().mapToInt(Integer::parseInt).sum();
     }
 }

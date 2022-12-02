@@ -15,4 +15,10 @@ class Day01SolutionTest {
         var input = List.of("1235");
         assertThat(maxCalories(input), equalTo(1235));
     }
+
+    @Test
+    void oneElfTwoSnacks() {
+        var input = List.of("1235", "4");
+        assertThat(maxCalories(input), equalTo(1239));
+    }
 }

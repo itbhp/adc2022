@@ -18,7 +18,7 @@ public class FilesModule {
     }
 
     public static List<String> read(URI fileName) {
-        try (Stream<String> lines = Files.lines(Paths.get(fileName))) {
+        try (var lines = Files.lines(Paths.get(fileName))) {
             return lines.collect(Collectors.toList());
         } catch (IOException e) {
             return Collections.emptyList();

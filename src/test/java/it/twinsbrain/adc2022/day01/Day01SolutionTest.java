@@ -22,9 +22,9 @@ class Day01SolutionTest {
         assertThat(maxCalories(input), equalTo(1239));
     }
 
-//    @Test
-//    void twoElvesTwoSnacks() {
-//        var input = List.of("1235", "4", "", "7", "6", "");
-//        assertThat(maxCalories(input), equalTo(1239));
-//    }
+    @Test
+    void twoElvesTwoSnacks() {
+        var input = List.of("1235", "4", "", "7", "6", "");
+        assertThat(maxCalories(input), equalTo(1239));
+    }
 }

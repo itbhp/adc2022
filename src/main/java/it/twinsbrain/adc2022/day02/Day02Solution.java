@@ -12,7 +12,7 @@ public class Day02Solution {
         var input = read(resource("/day02/input02.txt"));
         System.out.printf("Score part 1: %d", score(input));
         System.out.println();
-        System.out.printf("Score part 1: %d", scoreExpected(input));
+        System.out.printf("Score part 1: %d", scoreWithExpectedOutcome(input));
     }
 
     private static final int FIRST_PLAYER = 0;
@@ -26,7 +26,7 @@ public class Day02Solution {
                 .sum();
     }
 
-    public static int scoreExpected(List<String> input) {
+    public static int scoreWithExpectedOutcome(List<String> input) {
         return input.stream()
                 .map(l -> l.split(" "))
                 .map(Day02Solution::fromExpectedResultToMove)
@@ -35,6 +35,7 @@ public class Day02Solution {
                 .sum();
     }
 
+    @SuppressWarnings("unused")
     private static String[] fromExpectedResultToMove(String[] input) {
         var firstPlayerMove = adaptFirstPlayerMove(input[FIRST_PLAYER]);
         var expectedResult = input[SECOND_PLAYER];

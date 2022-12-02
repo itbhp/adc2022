@@ -1,5 +1,6 @@
 package it.twinsbrain.adc2022.day02;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -20,6 +21,7 @@ class Day02SolutionTest {
     void oneRoundDraw(String input, int expectedScore) {
         assertThat(score(List.of(input)), equalTo(expectedScore));
     }
+
     // Rock 1, Paper 2, Scissor 3
     // A, X -> Rock, B, Y -> Paper, C,Z -> Scissor
     @ParameterizedTest
@@ -40,5 +42,10 @@ class Day02SolutionTest {
     })
     void oneRoundLost(String input, int expectedScore) {
         assertThat(score(List.of(input)), equalTo(expectedScore));
+    }
+
+    @Test
+    void multipleRounds() {
+        assertThat(score(List.of("C X", "B X")), equalTo(8));
     }
 }

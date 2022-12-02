@@ -8,7 +8,14 @@ public class Day02Solution {
     private static final int SECOND_PLAYER = 1;
 
     public static int score(List<String> input) {
-        var moves = input.get(0).split(" ");
+        return input.stream()
+                .map(l -> l.split(" "))
+                .map(Day02Solution::roundScore)
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
+
+    private static int roundScore(String[] moves) {
         var firstPlayerMove = adaptFirstPlayerMove(moves[FIRST_PLAYER]);
         var secondPlayerMove = adaptSecondPlayerMove(moves[SECOND_PLAYER]);
 

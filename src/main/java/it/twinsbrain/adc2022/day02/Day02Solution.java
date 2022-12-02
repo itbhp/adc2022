@@ -81,7 +81,7 @@ public class Day02Solution {
     }
 }
 
-sealed abstract class Move permits Rock, Paper, Scissor {
+sealed abstract class Move {
     abstract Result winOver(Move other);
 
     abstract Move opponentMoveGiven(Result opponentResult);
@@ -172,7 +172,6 @@ enum Result {
     private final int points;
 
     Result(int points) {
-
         this.points = points;
     }
 

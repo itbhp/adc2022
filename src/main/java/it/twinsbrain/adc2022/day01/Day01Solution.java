@@ -27,19 +27,11 @@ public class Day01Solution {
     }
 
     public static int maxCaloriesByOneElf(List<String> input) {
-        var sum = 0;
-        var maxSum = 0;
-        for (String item : input) {
-            if (item.length() > 0) {
-                sum += Integer.parseInt(item);
-            } else {
-                if (sum > maxSum) {
-                    maxSum = sum;
-                }
-                sum = 0;
-            }
-        }
-        return maxSum;
+        return caloriesByElf(input)
+                .sorted(Collections.reverseOrder())
+                .limit(1)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     private static int singleElfCalories(String s) {

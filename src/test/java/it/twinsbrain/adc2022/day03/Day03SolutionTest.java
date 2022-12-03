@@ -22,6 +22,6 @@ class Day03SolutionTest {
 
         // 16 + 38 + 42 + 22 + 20 + 19
 
-        assertThat(Day03Solution.prioritiesSum(input), equalTo(157));
+        assertThat(Day03Solution.part1PrioritiesSum(input), equalTo(157));
     }
 }

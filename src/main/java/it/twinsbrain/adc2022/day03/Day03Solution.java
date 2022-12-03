@@ -83,7 +83,7 @@ public class Day03Solution {
                 return String.valueOf(c);
             }
         }
-        throw new IllegalStateException("Unexpected string format ");
+        throw new IllegalStateException("Unexpected group format " + chars);
     }
 
     public static <T> Collection<List<T>> chunked(List<T> inputList, int chunkSize) {

@@ -52,7 +52,7 @@ public class Day03Solution {
         var left = s.substring(0, length / 2);
         var right = s.substring(length / 2, length);
 
-        var leftChars = characterSet(left);
+        var leftChars = charactersSet(left);
         for (char c : right.toCharArray()) {
             if (leftChars.contains(c)) {
                 return String.valueOf(c);
@@ -61,7 +61,7 @@ public class Day03Solution {
         throw new IllegalStateException("Unexpected string format " + s);
     }
 
-    private static Set<Character> characterSet(String left) {
+    private static Set<Character> charactersSet(String left) {
         return left.chars().mapToObj(i -> (char) i).collect(toSet());
     }
 
@@ -74,7 +74,7 @@ public class Day03Solution {
     }
 
     private static String representativeChar(List<String> elvesItems) {
-        List<Set<Character>> chars = elvesItems.stream().map(Day03Solution::characterSet).toList();
+        List<Set<Character>> chars = elvesItems.stream().map(Day03Solution::charactersSet).toList();
         var firstElfItems = chars.get(0);
         var secondElfItems = chars.get(1);
         var thirdElfItems = chars.get(2);

@@ -26,18 +26,6 @@ public class Day01Solution {
                 .sum();
     }
 
-    private static Stream<Integer> caloriesByElf(List<String> input) {
-        String[] caloriesByElf = String.join("\n", input).split("\n\n");
-        return Arrays.stream(caloriesByElf)
-                .mapToInt(Day01Solution::singleElfCalories)
-                .boxed();
-    }
-
-    private static int singleElfCalories(String s) {
-        return Arrays.stream(s.split("\n")).mapToInt(Integer::valueOf).sum();
-    }
-
-
     public static int maxCaloriesByOneElf(List<String> input) {
         var sum = 0;
         var maxSum = 0;
@@ -52,5 +40,16 @@ public class Day01Solution {
             }
         }
         return maxSum;
+    }
+
+    private static int singleElfCalories(String s) {
+        return Arrays.stream(s.split("\n")).mapToInt(Integer::valueOf).sum();
+    }
+
+    private static Stream<Integer> caloriesByElf(List<String> input) {
+        String[] caloriesByElf = String.join("\n", input).split("\n\n");
+        return Arrays.stream(caloriesByElf)
+                .mapToInt(Day01Solution::singleElfCalories)
+                .boxed();
     }
 }

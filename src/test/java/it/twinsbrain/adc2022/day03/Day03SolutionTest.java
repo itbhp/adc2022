@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static it.twinsbrain.adc2022.day03.Day03Solution.part1PrioritiesSum;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -22,6 +23,6 @@ class Day03SolutionTest {
 
         // 16 + 38 + 42 + 22 + 20 + 19
 
-        assertThat(Day03Solution.part1PrioritiesSum(input), equalTo(157));
+        assertThat(part1PrioritiesSum(input), equalTo(157));
     }
 }

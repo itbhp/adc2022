@@ -19,23 +19,19 @@ public class Day01Solution {
     }
 
     public static int maxCaloriesByThreeElves(List<String> input) {
-        return caloriesByElf(input)
-                .sorted(Collections.reverseOrder())
-                .limit(3)
-                .mapToInt(Integer::intValue)
-                .sum();
+        return topCalories(input, 3);
     }
 
     public static int maxCaloriesByOneElf(List<String> input) {
-        return caloriesByElf(input)
-                .sorted(Collections.reverseOrder())
-                .limit(1)
-                .mapToInt(Integer::intValue)
-                .sum();
+        return topCalories(input, 1);
     }
 
-    private static int singleElfCalories(String s) {
-        return Arrays.stream(s.split("\n")).mapToInt(Integer::valueOf).sum();
+    private static int topCalories(List<String> input, int howMany) {
+        return caloriesByElf(input)
+                .sorted(Collections.reverseOrder())
+                .limit(howMany)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     private static Stream<Integer> caloriesByElf(List<String> input) {
@@ -43,5 +39,9 @@ public class Day01Solution {
         return Arrays.stream(caloriesByElf)
                 .mapToInt(Day01Solution::singleElfCalories)
                 .boxed();
+    }
+
+    private static int singleElfCalories(String s) {
+        return Arrays.stream(s.split("\n")).mapToInt(Integer::valueOf).sum();
     }
 }

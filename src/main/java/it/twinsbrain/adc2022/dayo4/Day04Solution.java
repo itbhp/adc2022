@@ -12,6 +12,7 @@ public class Day04Solution {
         var input = read(resource("/day04/input.txt"));
         System.out.printf("Part 1: %d", howManyRangesOverlapsFully(input));
         System.out.println();
+        System.out.printf("Part 2: %d", howManyRangesOverlaps(input));
     }
 
     public static Long howManyRangesOverlapsFully(List<String> input) {
@@ -19,6 +20,19 @@ public class Day04Solution {
                 .map(Day04Solution::toRangesPair)
                 .filter(Day04Solution::fullyContaining)
                 .count();
+    }
+
+    public static Long howManyRangesOverlaps(List<String> input) {
+        return input.stream()
+                .map(Day04Solution::toRangesPair)
+                .filter(Day04Solution::overlapping)
+                .count();
+    }
+
+    private static boolean overlapping(Pair pair) {
+        Range first = pair.first;
+        Range second = pair.second;
+        return first.overlaps(second);
     }
 
     private static boolean fullyContaining(Pair pair) {
@@ -30,6 +44,27 @@ public class Day04Solution {
     record Range(int start, int end) {
         public boolean fullyContains(Range second) {
             return this.start <= second.start && second.end <= this.end;
+        }
+
+        public boolean contains(int x) {
+            return x >= this.start && x <= this.end;
+        }
+
+
+        public boolean overlaps(Range second) {
+            if (second.equals(this)) {
+                return true;
+            }
+            if (this.fullyContains(second) || second.fullyContains(this)) {
+                return true;
+            }
+            if (this.contains(second.start) || this.contains(second.end)) {
+                return true;
+            }
+            if (second.contains(this.start) || second.contains(this.end)) {
+                return true;
+            }
+            return false;
         }
     }
 

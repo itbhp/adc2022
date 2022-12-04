@@ -52,19 +52,10 @@ public class Day04Solution {
 
 
         public boolean overlaps(Range second) {
-            if (second.equals(this)) {
-                return true;
-            }
-            if (this.fullyContains(second) || second.fullyContains(this)) {
-                return true;
-            }
             if (this.contains(second.start) || this.contains(second.end)) {
                 return true;
             }
-            if (second.contains(this.start) || second.contains(this.end)) {
-                return true;
-            }
-            return false;
+            return second.contains(this.start) || second.contains(this.end);
         }
     }
 

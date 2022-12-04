@@ -18,7 +18,7 @@ class Day03SolutionTest {
                 "PmmdzqPrVvPwwTWBwg", // P -> 42
                 "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn", // v -> 22
                 "ttgJtRGJQctTZtZT", // t -> 20
-                "CrZsJsPPZsGzwwsLwLmpwMDw" // s -> 19
+                "CrZsJsPPZsGzwwsLwLmpwMDw" // s -> 9
         );
 
         // 16 + 38 + 42 + 22 + 20 + 19

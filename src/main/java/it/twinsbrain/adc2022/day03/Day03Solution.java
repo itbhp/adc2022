@@ -30,8 +30,10 @@ public class Day03Solution {
         }
 
         AtomicInteger count = new AtomicInteger(1);
-        weights = IntStream.concat(IntStream.range(97, 123), IntStream.range(65, 91))
-                .mapToObj(i -> new Pair((char) i, count.getAndIncrement()))
+        weights = IntStream.concat(
+                    IntStream.range(97, 123),
+                    IntStream.range(65, 91)
+                ).mapToObj(i -> new Pair((char) i, count.getAndIncrement()))
                 .collect(toMap(p -> String.valueOf(p.c), p -> p.index));
     }
 

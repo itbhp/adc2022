@@ -60,7 +60,6 @@ class Day05SolutionTest {
             add("J");
             add("S");
             add("R");
-            add("Z");
         }});
 
         expected.add(new LinkedList<>() {{

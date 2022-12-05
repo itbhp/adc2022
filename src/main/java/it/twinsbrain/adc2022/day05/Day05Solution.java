@@ -30,10 +30,10 @@ public class Day05Solution {
     }
 
     public static ArrayList<LinkedList<String>> parseCrates(List<String> input) {
-        var cratesColumns = getCratesColumns(input);
+        var cratesColumns = computeCratesColumns(input.get(0));
         var crates = newArrayList(cratesColumns);
-        var regexp = Pattern.compile("\\[([A-Z])]\\s");
-        input.stream().takeWhile(s -> !s.matches("\\.*\\d+\\.*"))
+        var regexp = Pattern.compile("\\[([A-Z])]\\s?");
+        input.stream().takeWhile(row -> !row.matches("\\.*\\d+\\.*"))
                 .forEach(line -> {
                     List<String> columnsItems = chunked(line, 4).toList();
                     for (int i = 0; i < columnsItems.size(); i++) {
@@ -50,8 +50,8 @@ public class Day05Solution {
         return crates;
     }
 
-    private static int getCratesColumns(List<String> input) {
-        int length = input.get(0).length();
+    private static int computeCratesColumns(String row) {
+        int length = row.length();
         int div = length / 4;
         return div * 4 == length ? div : div + 1;
     }

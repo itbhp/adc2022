@@ -1,4 +1,4 @@
-package it.twinsbrain.adc2022.dayo4;
+package it.twinsbrain.adc2022.day04;
 
 import java.net.URISyntaxException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package it.twinsbrain.adc2022.dayo4;
+package it.twinsbrain.adc2022.day04;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -8,8 +8,8 @@ import java.util.List;
 
 import static it.twinsbrain.adc2022.FilesModule.read;
 import static it.twinsbrain.adc2022.FilesModule.resource;
-import static it.twinsbrain.adc2022.dayo4.Day04Solution.howManyRangesOverlaps;
-import static it.twinsbrain.adc2022.dayo4.Day04Solution.howManyRangesOverlapsFully;
+import static it.twinsbrain.adc2022.day04.Day04Solution.howManyRangesOverlaps;
+import static it.twinsbrain.adc2022.day04.Day04Solution.howManyRangesOverlapsFully;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 

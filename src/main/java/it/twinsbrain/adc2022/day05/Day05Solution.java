@@ -5,6 +5,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -33,21 +34,32 @@ public class Day05Solution {
         var cratesColumns = computeCratesColumns(input.get(0));
         var crates = newArrayList(cratesColumns);
         var regexp = Pattern.compile("\\[([A-Z])]\\s?");
-        input.stream().takeWhile(row -> !row.matches("\\.*\\d+\\.*"))
-                .forEach(line -> {
-                    List<String> columnsItems = chunked(line, 4).toList();
-                    for (int i = 0; i < columnsItems.size(); i++) {
-                        var columnItem = columnsItems.get(i);
-                        if (columnItem.trim().length() > 0) {
-                            Matcher matcher = regexp.matcher(columnItem);
-                            if (matcher.find()) {
-                                var id = matcher.group(1);
-                                crates.get(i).add(id);
-                            }
-                        }
-                    }
-                });
+        BiFunction<Integer, String, Void> addElemToCrates = (Integer i, String id) -> {
+            crates.get(i).add(id);
+            return null;
+        };
+        input.stream()
+                .takeWhile(row -> !row.matches("\\.*\\d+\\.*"))
+                .forEach(line -> addColumnItemsToCrates(regexp, addElemToCrates, line));
         return crates;
+    }
+
+    private static void addColumnItemsToCrates(
+            Pattern regexp,
+            BiFunction<Integer, String, Void> addElemToCrates,
+            String line
+    ) {
+        List<String> columnsItems = chunked(line, 4).toList();
+        for (int i = 0; i < columnsItems.size(); i++) {
+            var columnItem = columnsItems.get(i);
+            if (columnItem.trim().length() > 0) {
+                Matcher matcher = regexp.matcher(columnItem);
+                if (matcher.find()) {
+                    var id = matcher.group(1);
+                    addElemToCrates.apply(i, id);
+                }
+            }
+        }
     }
 
     private static int computeCratesColumns(String row) {

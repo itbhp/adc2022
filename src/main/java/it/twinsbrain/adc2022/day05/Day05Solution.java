@@ -1,9 +1,6 @@
 package it.twinsbrain.adc2022.day05;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
@@ -28,6 +25,31 @@ public class Day05Solution {
         l.addFirst(4);
 
         System.out.println(l.peek());
+    }
+
+    record Command(int howMany, int from, int to) {
+    }
+
+    public static List<Command> parseCommands(List<String> input) {
+        var regexp = Pattern.compile("move (\\d) from (\\d) to (\\d)");
+        return input.stream()
+                .dropWhile(line -> !line.contains("move"))
+                .map(line -> {
+                    var matcher = regexp.matcher(line);
+                    if (matcher.find()) {
+                        Command command = new Command(
+                                Integer.parseInt(matcher.group(1)),
+                                Integer.parseInt(matcher.group(2)),
+                                Integer.parseInt(matcher.group(3))
+                        );
+                        return Optional.of(command);
+                    } else {
+                        return Optional.<Command>empty();
+                    }
+                })
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     public static ArrayList<LinkedList<String>> parseCrates(List<String> input) {

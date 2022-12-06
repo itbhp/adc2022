@@ -42,7 +42,7 @@ public class Day05Solution {
     }
 
     public static List<Command> parseCommands(List<String> input) {
-        var regexp = Pattern.compile("move (\\d) from (\\d) to (\\d)");
+        var regexp = Pattern.compile("move (\\d+) from (\\d+) to (\\d+)");
         return input.stream()
                 .dropWhile(line -> !line.contains("move"))
                 .map(line -> {

@@ -32,8 +32,8 @@ public class Day06Solution {
         buffer.chars()
                 .mapToObj(i -> (char) i)
                 .takeWhile(c -> window.markerWasNotFound())
-                .forEach(c -> {
-                    window.accept(c, index.intValue());
+                .forEach(character -> {
+                    window.accept(character, index.intValue());
                     index.getAndIncrement();
                 });
         return window.lastIndex;

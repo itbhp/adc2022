@@ -31,7 +31,7 @@ public class Day06Solution {
         AtomicInteger index = new AtomicInteger(1);
         buffer.chars()
                 .mapToObj(i -> (char) i)
-                .takeWhile(c -> window.markerWasNotFound())
+                .takeWhile(c -> window.markerIsNotFound())
                 .forEach(character -> {
                     window.accept(character, index.intValue());
                     index.getAndIncrement();
@@ -57,7 +57,7 @@ public class Day06Solution {
             lastIndex = index;
         }
 
-        public boolean markerWasNotFound() {
+        public boolean markerIsNotFound() {
             return queue.size() != size;
         }
     }

@@ -27,7 +27,7 @@ public class Day06Solution {
 
     private static int findMarker(List<String> input, int size) {
         String buffer = input.get(0);
-        var window = new Window(size);
+        var window = new DistinctElementsWindow(size);
         AtomicInteger index = new AtomicInteger(1);
         buffer.chars()
                 .mapToObj(i -> (char) i)
@@ -39,12 +39,12 @@ public class Day06Solution {
         return window.lastIndex;
     }
 
-    static class Window {
+    static class DistinctElementsWindow {
         private final LinkedList<Character> queue = new LinkedList<>();
         private final int size;
         private int lastIndex = -1;
 
-        Window(int size) {
+        DistinctElementsWindow(int size) {
             this.size = size;
         }
 

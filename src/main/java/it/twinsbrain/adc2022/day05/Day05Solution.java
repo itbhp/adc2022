@@ -33,8 +33,8 @@ public class Day05Solution {
             var from = cratesColumns.get(command.from - 1);
             var to = cratesColumns.get(command.to - 1);
             var stack = new LinkedList<String>();
-            swap(command, from, stack);
-            swap(command, stack, to);
+            swap(from, stack, command.howMany);
+            swap(stack, to, command.howMany);
         }
     }
 
@@ -46,12 +46,12 @@ public class Day05Solution {
         for (Command command : commands) {
             var from = cratesColumns.get(command.from - 1);
             var to = cratesColumns.get(command.to - 1);
-            swap(command, from, to);
+            swap(from, to, command.howMany);
         }
     }
 
-    private static void swap(Command command, LinkedList<String> from, LinkedList<String> to) {
-        for (int i = 0; i < command.howMany; i++) {
+    private static void swap(LinkedList<String> from, LinkedList<String> to, int howMany) {
+        for (int i = 0; i < howMany; i++) {
             if (!from.isEmpty()) {
                 to.push(from.pop());
             }

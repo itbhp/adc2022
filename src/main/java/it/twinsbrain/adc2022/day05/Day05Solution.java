@@ -4,10 +4,8 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,25 +23,16 @@ public class Day05Solution {
     public static String topElementsAfterMoving(List<String> input) {
         var cratesColumns = parseCrates(input);
         var commands = parseCommands(input);
-        var cratesAfterMoving = commands.stream()
-                .collect(
-                        foldLeft(
-                                cratesColumns,
-                                (crates, command) -> {
-                                    var from = crates.get(command.from - 1);
-                                    var to = crates.get(command.to - 1);
-                                    System.out.println("crates: " + crates);
-                                    System.out.println("command " + command);
-                                    for (int i = 0; i < command.howMany; i++) {
-                                        if (!from.isEmpty()) {
-                                            to.addFirst(from.removeFirst());
-                                        }
-                                    }
-                                    return crates;
-                                }
-                        )
-                );
-        return cratesAfterMoving.stream()
+        for (Command command : commands) {
+            var from = cratesColumns.get(command.from - 1);
+            var to = cratesColumns.get(command.to - 1);
+            for (int i = 0; i < command.howMany; i++) {
+                if (!from.isEmpty()) {
+                    to.addFirst(from.removeFirst());
+                }
+            }
+        }
+        return cratesColumns.stream()
                 .map(LinkedList::peek)
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining());
@@ -129,18 +118,5 @@ public class Day05Solution {
                 .values()
                 .stream()
                 .map(l -> l.stream().map(String::valueOf).collect(Collectors.joining()));
-    }
-
-    public static <A, B> Collector<A, ?, B> foldLeft(
-            final B init,
-            final BiFunction<? super B, ? super A, ? extends B> f
-    ) {
-        return Collectors.collectingAndThen(
-                Collectors.reducing(
-                        Function.<B>identity(), a -> b -> f.apply(b, a),
-                        Function::andThen
-                ),
-                endo -> endo.apply(init)
-        );
     }
 }

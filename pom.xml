@@ -83,8 +83,8 @@
                 <configuration>
                     <fork>true</fork>
                     <verbose>true</verbose>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>19</source>
+                    <target>19</target>
                     <release>${java.version}</release>
                     <compilerVersion>${java.version}</compilerVersion>
                     <compilerArgs>--enable-preview</compilerArgs>

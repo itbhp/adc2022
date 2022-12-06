@@ -47,7 +47,7 @@ public class Day05Solution {
                 .dropWhile(line -> !line.contains("move"))
                 .map(line -> {
                     var matcher = regexp.matcher(line);
-                    if (matcher.find()) {
+                    if (matcher.matches()) {
                         Command command = new Command(
                                 Integer.parseInt(matcher.group(1)),
                                 Integer.parseInt(matcher.group(2)),

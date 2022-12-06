@@ -19,6 +19,7 @@ public class Day05Solution {
         var input = read(resource("/day05/input.txt"));
         System.out.printf("Part 1: %s", part1(input));
         System.out.println();
+        System.out.printf("Part 2: %s", part2(input));
     }
 
     public static String part2(List<String> input) {

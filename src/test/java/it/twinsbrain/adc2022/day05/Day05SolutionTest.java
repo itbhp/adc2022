@@ -1,13 +1,18 @@
 package it.twinsbrain.adc2022.day05;
 
 import it.twinsbrain.adc2022.day05.Day05Solution.Command;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
 import static it.twinsbrain.adc2022.day05.Day05Solution.parseCrates;
+import static it.twinsbrain.adc2022.day05.Day05Solution.part1;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -142,7 +147,7 @@ class Day05SolutionTest {
     }
 
     @Test
-    void acceptanceTestPart1() {
+    void part1ShouldWork() {
         List<String> input = List.of(
                 "        [H]     [W] [B]           ",
                 "    [D] [B]     [L] [G] [N]       ",
@@ -160,6 +165,24 @@ class Day05SolutionTest {
 
         var expected = "VFHJWPNQJ";
 
-        assertThat(Day05Solution.topElementsAfterMoving(input), equalTo(expected));
+        assertThat(part1(input), equalTo(expected));
+    }
+
+    @Nested
+    class AcceptanceTest {
+        private static final List<String> input;
+
+        static {
+            try {
+                input = read(resource("/day05/input.txt"));
+            } catch (URISyntaxException e) {
+                throw new RuntimeException("input file not found!");
+            }
+        }
+
+        @Test
+        void part1Test() {
+            assertThat(part1(input), equalTo("TLFGBZHCN"));
+        }
     }
 }

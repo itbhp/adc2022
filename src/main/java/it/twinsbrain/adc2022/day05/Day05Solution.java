@@ -3,6 +3,7 @@ package it.twinsbrain.adc2022.day05;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,13 +17,28 @@ public class Day05Solution {
 
     public static void main(String[] args) throws URISyntaxException {
         var input = read(resource("/day05/input.txt"));
-        System.out.printf("Part 1: %s", topElementsAfterMoving(input));
+        System.out.printf("Part 1: %s", part1(input));
         System.out.println();
     }
 
-    public static String topElementsAfterMoving(List<String> input) {
+    public static String part1(List<String> input) {
+        return topElementsAfterMoving(input, Day05Solution::part1ApplyCommands);
+    }
+
+    public static String topElementsAfterMoving(
+            List<String> input,
+            BiConsumer<List<LinkedList<String>>, List<Command>> strategy
+    ) {
         var cratesColumns = parseCrates(input);
         var commands = parseCommands(input);
+        strategy.accept(cratesColumns, commands);
+        return cratesColumns.stream()
+                .map(LinkedList::peek)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining());
+    }
+
+    private static void part1ApplyCommands(List<LinkedList<String>> cratesColumns, List<Command> commands) {
         for (Command command : commands) {
             var from = cratesColumns.get(command.from - 1);
             var to = cratesColumns.get(command.to - 1);
@@ -32,10 +48,6 @@ public class Day05Solution {
                 }
             }
         }
-        return cratesColumns.stream()
-                .map(LinkedList::peek)
-                .filter(Objects::nonNull)
-                .collect(Collectors.joining());
     }
 
     record Command(int howMany, int from, int to) {

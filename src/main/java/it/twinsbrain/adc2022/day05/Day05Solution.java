@@ -1,30 +1,52 @@
 package it.twinsbrain.adc2022.day05;
 
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
+
 public class Day05Solution {
 
-    public static void main(String[] args) {
-        Deque<Integer> l = new LinkedList<>();
-        l.add(1);
-        l.add(2);
-        l.add(3);
+    public static void main(String[] args) throws URISyntaxException {
+        var input = read(resource("/day05/input.txt"));
+        System.out.printf("Part 1: %s", topElementsAfterMoving(input));
+        System.out.println();
+    }
 
-        System.out.println(l.peek());
-
-        l.removeFirst();
-
-        System.out.println(l.peek());
-
-        l.addFirst(4);
-
-        System.out.println(l.peek());
+    public static String topElementsAfterMoving(List<String> input) {
+        var cratesColumns = parseCrates(input);
+        var commands = parseCommands(input);
+        var cratesAfterMoving = commands.stream()
+                .collect(
+                        foldLeft(
+                                cratesColumns,
+                                (crates, command) -> {
+                                    var from = crates.get(command.from - 1);
+                                    var to = crates.get(command.to - 1);
+                                    System.out.println("crates: " + crates);
+                                    System.out.println("command " + command);
+                                    for (int i = 0; i < command.howMany; i++) {
+                                        if (!from.isEmpty()) {
+                                            to.addFirst(from.removeFirst());
+                                        }
+                                    }
+                                    return crates;
+                                }
+                        )
+                );
+        return cratesAfterMoving.stream()
+                .map(LinkedList::peek)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining());
     }
 
     record Command(int howMany, int from, int to) {
@@ -76,7 +98,7 @@ public class Day05Solution {
             var columnItem = columnsItems.get(i);
             if (columnItem.trim().length() > 0) {
                 Matcher matcher = regexp.matcher(columnItem);
-                if (matcher.find()) {
+                if (matcher.matches()) {
                     var id = matcher.group(1);
                     addElemToCrates.apply(i, id);
                 }
@@ -107,5 +129,18 @@ public class Day05Solution {
                 .values()
                 .stream()
                 .map(l -> l.stream().map(String::valueOf).collect(Collectors.joining()));
+    }
+
+    public static <A, B> Collector<A, ?, B> foldLeft(
+            final B init,
+            final BiFunction<? super B, ? super A, ? extends B> f
+    ) {
+        return Collectors.collectingAndThen(
+                Collectors.reducing(
+                        Function.<B>identity(), a -> b -> f.apply(b, a),
+                        Function::andThen
+                ),
+                endo -> endo.apply(init)
+        );
     }
 }

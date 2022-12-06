@@ -140,4 +140,26 @@ class Day05SolutionTest {
 
         assertThat(Day05Solution.parseCommands(input), equalTo(expected));
     }
+
+    @Test
+    void acceptanceTestPart1() {
+        List<String> input = List.of(
+                "        [H]     [W] [B]           ",
+                "    [D] [B]     [L] [G] [N]       ",
+                "[P] [J] [T]     [M] [R] [D]       ",
+                "[V] [F] [V]     [F] [Z] [B]     [C]",
+                "[Z] [V] [S]     [G] [H] [C] [Q] [R]",
+                "[W] [W] [L] [J] [B] [V] [P] [B] [Z]",
+                "[D] [S] [M] [S] [Z] [W] [J] [T] [G]",
+                "[T] [L] [Z] [R] [C] [Q] [V] [P] [H]",
+                " 1   2   3   4   5   6   7   8   9",
+                "                                  ",
+                "move 2 from 2 to 9",
+                "move 1 from 1 to 6"
+        );
+
+        var expected = "VFHJWPNQJ";
+
+        assertThat(Day05Solution.topElementsAfterMoving(input), equalTo(expected));
+    }
 }

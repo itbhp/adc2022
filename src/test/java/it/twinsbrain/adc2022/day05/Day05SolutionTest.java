@@ -1,6 +1,6 @@
 package it.twinsbrain.adc2022.day05;
 
-import it.twinsbrain.adc2022.day05.Day05Solution.Command;
+import it.twinsbrain.adc2022.day05.Day05Solution.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -11,8 +11,7 @@ import java.util.List;
 
 import static it.twinsbrain.adc2022.FilesModule.read;
 import static it.twinsbrain.adc2022.FilesModule.resource;
-import static it.twinsbrain.adc2022.day05.Day05Solution.parseCrates;
-import static it.twinsbrain.adc2022.day05.Day05Solution.part1;
+import static it.twinsbrain.adc2022.day05.Day05Solution.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -183,6 +182,11 @@ class Day05SolutionTest {
         @Test
         void part1Test() {
             assertThat(part1(input), equalTo("TLFGBZHCN"));
+        }
+
+        @Test
+        void part2Test() {
+            assertThat(part2(input), equalTo("QRQFHFWCL"));
         }
     }
 }

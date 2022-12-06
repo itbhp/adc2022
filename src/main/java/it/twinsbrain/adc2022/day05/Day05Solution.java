@@ -21,6 +21,31 @@ public class Day05Solution {
         System.out.println();
     }
 
+    public static String part2(List<String> input) {
+        return topElementsAfterMoving(input, Day05Solution::part2ApplyCommands);
+    }
+
+    private static void part2ApplyCommands(
+            List<LinkedList<String>> cratesColumns,
+            List<Command> commands
+    ) {
+        for (Command command : commands) {
+            var from = cratesColumns.get(command.from - 1);
+            var to = cratesColumns.get(command.to - 1);
+            var stack = new Stack<String>();
+            for (int i = 0; i < command.howMany; i++) {
+                if (!from.isEmpty()) {
+                    stack.push(from.pop());
+                }
+            }
+            for (int i = 0; i < command.howMany; i++) {
+                if (!stack.isEmpty()) {
+                    to.push(stack.pop());
+                }
+            }
+        }
+    }
+
     public static String part1(List<String> input) {
         return topElementsAfterMoving(input, Day05Solution::part1ApplyCommands);
     }

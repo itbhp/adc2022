@@ -32,22 +32,30 @@ public class Day05Solution {
         for (Command command : commands) {
             var from = cratesColumns.get(command.from - 1);
             var to = cratesColumns.get(command.to - 1);
-            var stack = new Stack<String>();
-            for (int i = 0; i < command.howMany; i++) {
-                if (!from.isEmpty()) {
-                    stack.push(from.pop());
-                }
-            }
-            for (int i = 0; i < command.howMany; i++) {
-                if (!stack.isEmpty()) {
-                    to.push(stack.pop());
-                }
-            }
+            var stack = new LinkedList<String>();
+            swap(command, from, stack);
+            swap(command, stack, to);
         }
     }
 
     public static String part1(List<String> input) {
         return topElementsAfterMoving(input, Day05Solution::part1ApplyCommands);
+    }
+
+    private static void part1ApplyCommands(List<LinkedList<String>> cratesColumns, List<Command> commands) {
+        for (Command command : commands) {
+            var from = cratesColumns.get(command.from - 1);
+            var to = cratesColumns.get(command.to - 1);
+            swap(command, from, to);
+        }
+    }
+
+    private static void swap(Command command, LinkedList<String> from, LinkedList<String> to) {
+        for (int i = 0; i < command.howMany; i++) {
+            if (!from.isEmpty()) {
+                to.push(from.pop());
+            }
+        }
     }
 
     public static String topElementsAfterMoving(
@@ -61,18 +69,6 @@ public class Day05Solution {
                 .map(LinkedList::peek)
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining());
-    }
-
-    private static void part1ApplyCommands(List<LinkedList<String>> cratesColumns, List<Command> commands) {
-        for (Command command : commands) {
-            var from = cratesColumns.get(command.from - 1);
-            var to = cratesColumns.get(command.to - 1);
-            for (int i = 0; i < command.howMany; i++) {
-                if (!from.isEmpty()) {
-                    to.addFirst(from.removeFirst());
-                }
-            }
-        }
     }
 
     record Command(int howMany, int from, int to) {

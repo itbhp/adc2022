@@ -8,9 +8,8 @@ import java.util.stream.Collectors;
 
 public class Day07Solution {
 
-    static Pattern filePattern = Pattern.compile("(\\d+) (.*)");
-
     public static FileSystem parse(List<String> input) {
+        var filePattern = Pattern.compile("(\\d+) (.*)");
         Directory root = Directory.root();
         Directory currentDir = root;
         var iterator = input.iterator();
@@ -24,7 +23,7 @@ public class Day07Solution {
             } else if (consoleLine.startsWith("dir")) {
                 addDir(currentDir, consoleLine);
             } else if (consoleLine.matches("\\d+\\s.*")) {
-                addFile(currentDir, consoleLine);
+                addFile(currentDir, consoleLine, filePattern);
             }
 
         }
@@ -46,7 +45,7 @@ public class Day07Solution {
         currentDir.addSubDir(dirName);
     }
 
-    private static void addFile(Directory currentDir, String line) {
+    private static void addFile(Directory currentDir, String line, Pattern filePattern) {
         var matcher = filePattern.matcher(line);
         if (matcher.matches()) {
             var size = Integer.parseInt(matcher.group(1));

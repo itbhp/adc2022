@@ -4,7 +4,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -101,9 +100,8 @@ public class Day05Solution {
         var cratesColumns = computeCratesColumns(input.get(0));
         var crates = newArrayList(cratesColumns);
         var regexp = Pattern.compile("\\[([A-Z])]\\s?");
-        BiFunction<Integer, String, Void> addElemToCrates = (Integer i, String id) -> {
+        BiConsumer<Integer, String> addElemToCrates = (Integer i, String id) -> {
             crates.get(i).add(id);
-            return null;
         };
         input.stream()
                 .takeWhile(row -> !row.matches("\\.*\\d+\\.*"))
@@ -113,7 +111,7 @@ public class Day05Solution {
 
     private static void addColumnItemsToCrates(
             Pattern regexp,
-            BiFunction<Integer, String, Void> addElemToCrates,
+            BiConsumer<Integer, String> addElemToCrates,
             String line
     ) {
         List<String> columnsItems = chunked(line, 4).toList();
@@ -123,7 +121,7 @@ public class Day05Solution {
                 Matcher matcher = regexp.matcher(columnItem);
                 if (matcher.matches()) {
                     var id = matcher.group(1);
-                    addElemToCrates.apply(i, id);
+                    addElemToCrates.accept(i, id);
                 }
             }
         }

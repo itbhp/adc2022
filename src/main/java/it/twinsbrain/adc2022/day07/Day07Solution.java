@@ -110,12 +110,12 @@ final class Directory implements FileSystem {
     public String toString() {
         StringBuilder res = new StringBuilder("[" + name + "]");
         if (!children.isEmpty()) {
-            Map<Boolean, List<FileSystem>> areDirectory = children.stream()
+            Map<Boolean, List<FileSystem>> partitionWithDirs = children.stream()
                     .collect(Collectors.partitioningBy(FileSystem::isDirectory));
             res.append("->");
             res.append("{");
-            res.append(areDirectory.get(false).stream().map(FileSystem::toString).collect(joining(",")));
-            List<FileSystem> subDirs = areDirectory.get(true);
+            res.append(partitionWithDirs.get(false).stream().map(FileSystem::toString).collect(joining(",")));
+            List<FileSystem> subDirs = partitionWithDirs.get(true);
             if (subDirs.size() > 0) {
                 res.append(",");
                 res.append(subDirs.stream().map(FileSystem::toString).collect(joining(",")));

@@ -27,9 +27,7 @@ public class Day07Solution {
             } else if (consoleLine.matches("\\d+\\s.*")) {
                 addFile(currentDir, consoleLine, filePattern);
             }
-
         }
-
         return root;
     }
 

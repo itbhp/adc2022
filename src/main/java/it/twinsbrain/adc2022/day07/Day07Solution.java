@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.joining;
+
 public class Day07Solution {
 
     public static FileSystem parse(List<String> input) {
@@ -112,12 +114,15 @@ final class Directory implements FileSystem {
         if (!children.isEmpty()) {
             Map<Boolean, List<FileSystem>> areDirectory = children.stream()
                     .collect(Collectors.partitioningBy(FileSystem::isDirectory));
-            for (FileSystem file : areDirectory.get(false)) {
-                res.append("-> ").append(file);
+            res.append("->");
+            res.append("{");
+            res.append(areDirectory.get(false).stream().map(FileSystem::toString).collect(joining(",")));
+            List<FileSystem> subDirs = areDirectory.get(true);
+            if (subDirs.size() > 0) {
+                res.append(",");
+                res.append(subDirs.stream().map(FileSystem::toString).collect(joining(",")));
             }
-            for (FileSystem directory : areDirectory.get(true)) {
-                res.append("-> ").append(directory);
-            }
+            res.append("}");
         }
         return res.toString();
     }

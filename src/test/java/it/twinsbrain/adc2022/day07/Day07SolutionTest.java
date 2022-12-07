@@ -25,6 +25,6 @@ class Day07SolutionTest {
         );
 
         var parsed = parse(input);
-        assertThat(parsed.toString(), equalTo("[/]-> b.txt(14848514)-> c.dat(8504156)-> [a]-> f(29116)-> g(2557)"));
+        assertThat(parsed.toString(), equalTo("[/]->{b.txt(14848514),c.dat(8504156),[a]->{f(29116),g(2557)}}"));
     }
 }

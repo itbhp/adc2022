@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static it.twinsbrain.adc2022.day07.Day07Solution.parse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 class Day07SolutionTest {
 
@@ -22,20 +24,7 @@ class Day07SolutionTest {
                 "2557 g"
         );
 
-        Directory expected = Directory.root();
-        Directory a = new Directory(
-                "a",
-                List.of(
-                        new File("f", 29116),
-                        new File("g", 2557)
-                ),
-                expected
-        );
-        expected.addSubDir(a);
-        expected.addFile("b.txt", 14848514);
-        expected.addFile("c.dat", 8504156);
-
-        var parse = parse(input);
-        System.out.println("parsed");
+        var parsed = parse(input);
+        assertThat(parsed.toString(), equalTo("[/]-> b.txt(14848514)-> c.dat(8504156)-> [a]-> f(29116)-> g(2557)"));
     }
 }

@@ -1,21 +1,14 @@
 package it.twinsbrain.adc2022.day07;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
-
-import static it.twinsbrain.adc2022.FilesModule.read;
-import static it.twinsbrain.adc2022.FilesModule.resource;
+import java.util.stream.Collectors;
 
 public class Day07Solution {
 
-    public static void main(String[] args) throws URISyntaxException {
-        var input = read(resource("/day07/input.txt"));
-        FileSystem parsed = parse(input);
-    }
-
-    static Pattern filePattern = Pattern.compile("(\\d+) (\\w+)");
+    static Pattern filePattern = Pattern.compile("(\\d+) (.*)");
 
     public static FileSystem parse(List<String> input) {
         Directory root = Directory.root();
@@ -26,24 +19,16 @@ public class Day07Solution {
             var consoleLine = iterator.next();
             if (consoleLine.startsWith("$ cd")) {
                 currentDir = execCd(currentDir, consoleLine);
+            } else if (consoleLine.startsWith("$ ls")) {
+                // DO NOTHING
+            } else if (consoleLine.startsWith("dir")) {
+                addDir(currentDir, consoleLine);
+            } else if (consoleLine.matches("\\d+\\s.*")) {
+                addFile(currentDir, consoleLine);
             }
 
-            if (consoleLine.startsWith("$ ls")) {
-                String nextLine = iterator.next();
-                while (nextLine.matches("dir\\s.*") || nextLine.matches("\\d+\\s.*")) {
-                    if (nextLine.startsWith("dir")) {
-                        addDir(currentDir, nextLine);
-                    } else {
-                        addFile(currentDir, nextLine);
-                    }
-                    if (iterator.hasNext()) {
-                        nextLine = iterator.next();
-                    } else {
-                        nextLine = "";
-                    }
-                }
-            }
         }
+
         return root;
     }
 
@@ -114,16 +99,28 @@ final class Directory implements FileSystem {
         children.add(new Directory(dirName, new ArrayList<>(), this));
     }
 
-    public void addSubDir(Directory d) {
-        children.add(d);
-    }
-
     public void addFile(String fileName, int size) {
         children.add(new File(fileName, size));
     }
 
     public Directory moveBack() {
         return parent;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder("[" + name + "]");
+        if (!children.isEmpty()) {
+            Map<Boolean, List<FileSystem>> areDirectory = children.stream()
+                    .collect(Collectors.partitioningBy(FileSystem::isDirectory));
+            for (FileSystem file : areDirectory.get(false)) {
+                res.append("-> ").append(file);
+            }
+            for (FileSystem directory : areDirectory.get(true)) {
+                res.append("-> ").append(directory);
+            }
+        }
+        return res.toString();
     }
 }
 
@@ -149,5 +146,10 @@ final class File implements FileSystem {
 
     public int size() {
         return size;
+    }
+
+    @Override
+    public String toString() {
+        return fileName + "(" + size + ")";
     }
 }

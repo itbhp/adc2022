@@ -1,10 +1,8 @@
 package it.twinsbrain.adc2022.day07;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -40,7 +38,7 @@ public class Day07Solution {
         Directory root = parse(input);
         var currentAvailableSpace = 70_000_000 - root.size();
         var neededSpace = 30_000_000 - currentAvailableSpace;
-        final List<Directory> candidateDirToDelete = new LinkedList<>();
+        final Queue<Directory> candidateDirToDelete = new ConcurrentLinkedQueue<>();
         Consumer<Directory> accumulator = dirToVisit -> {
             if (dirToVisit.size() >= neededSpace) {
                 candidateDirToDelete.add(dirToVisit);

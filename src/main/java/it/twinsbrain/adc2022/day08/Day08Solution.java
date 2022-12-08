@@ -21,25 +21,21 @@ public class Day08Solution {
     public static int highestScenicScore(List<String> input) {
         int[][] grid = parse(input);
         int size = input.size();
-        int max = Integer.MIN_VALUE;
+        AtomicInteger max = new AtomicInteger(Integer.MIN_VALUE);
 
-        for (int i = 0; i < grid.length; i++) {
-            var row = grid[i];
-            for (int j = 0; j < row.length; j++) {
-                var candidate = grid[i][j];
-                int fI = i;
-                int fJ = j;
-                int scoreLeft = visibleFromLeft(j, candidate, k -> grid[fI][k]);
-                int scoreRight = visibleFromRight(size, j, candidate, k -> grid[fI][k]);
-                int scoreUp = visibleFromUp(i, candidate, k -> grid[k][fJ]);
-                int scoreDown = visibleFromDown(size, i, candidate, k -> grid[k][fJ]);
-                var scenicScore = scoreDown * scoreUp * scoreLeft * scoreRight;
-                if (scenicScore > max) {
-                    max = scenicScore;
-                }
-            }
-        }
-        return max;
+        IntStream.range(0, size).forEach(i ->
+                IntStream.range(0, size).forEach(j -> {
+                    var candidate = grid[i][j];
+                    int scoreLeft = visibleFromLeft(j, candidate, k -> grid[i][k]);
+                    int scoreRight = visibleFromRight(size, j, candidate, k -> grid[i][k]);
+                    int scoreUp = visibleFromUp(i, candidate, k -> grid[k][j]);
+                    int scoreDown = visibleFromDown(size, i, candidate, k -> grid[k][j]);
+                    var scenicScore = scoreDown * scoreUp * scoreLeft * scoreRight;
+                    if (scenicScore > max.intValue()) {
+                        max.set(scenicScore);
+                    }
+                }));
+        return max.intValue();
     }
 
     private static int visibleFromDown(int size, int i, int candidate, Function<Integer, Integer> reader) {

@@ -50,8 +50,8 @@ class Day07SolutionTest {
 
         // 14848514 + 8504156 + 29116 + 2557
 
-        var parsed = parse(input);
-        assertThat(parsed.size(), equalTo(23384343));
+        var root = parse(input);
+        assertThat(root.size(), equalTo(23384343));
     }
 
     @Nested

@@ -2,15 +2,16 @@ package it.twinsbrain.adc2022.day07;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static it.twinsbrain.adc2022.FilesModule.read;
 import static it.twinsbrain.adc2022.FilesModule.resource;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public class Day07Solution {
 
@@ -22,10 +23,17 @@ public class Day07Solution {
 
     public static int part1(List<String> input) {
         Directory root = parse(input);
-        return root.selectDir(d -> d.size() > 100000)
-                .stream()
-                .mapToInt(Directory::size)
-                .sum();
+        int sum = 0;
+        var unvisitedDir = new LinkedList<Directory>();
+        unvisitedDir.push(root);
+        while (!unvisitedDir.isEmpty()) {
+            var dirToVisit = unvisitedDir.pop();
+            if (dirToVisit.size() < 100_000) {
+                sum += dirToVisit.size();
+            }
+            dirToVisit.allSubDirs().forEach(unvisitedDir::push);
+        }
+        return sum;
     }
 
     public static Directory parse(List<String> input) {
@@ -72,6 +80,17 @@ public class Day07Solution {
         }
     }
 
+//    private static <T> List<T> visit(FileSystem f, Predicate<FileSystem> p, Function<FileSystem, T> projector){
+//        var res = new ArrayList<T>();
+//        return
+//    }
+//
+//    private static <T>List<T> visit(
+//            FileSystem f, Predicate<FileSystem> p, Function<FileSystem, T> projector, List<T> acc
+//    ){
+//
+//    }
+
 }
 
 sealed interface FileSystem permits Directory, File {
@@ -86,6 +105,8 @@ final class Directory implements FileSystem {
     private final String name;
     private final List<FileSystem> children;
     private final Directory parent;
+
+    private int size = -1; // not yet calculated
 
     public Directory(String name, List<FileSystem> children, Directory parent) {
         this.name = name;
@@ -116,7 +137,15 @@ final class Directory implements FileSystem {
 
     @Override
     public int size() {
-        return children.stream().mapToInt(FileSystem::size).sum();
+        return memoizedSize();
+    }
+
+    private int memoizedSize() {
+        if (size != -1) {
+            return size;
+        }
+        size = children.stream().mapToInt(FileSystem::size).sum();
+        return size;
     }
 
     public void addSubDir(String dirName) {
@@ -129,6 +158,10 @@ final class Directory implements FileSystem {
 
     public Directory moveBack() {
         return parent;
+    }
+
+    public List<Directory> allSubDirs() {
+        return children.stream().filter(FileSystem::isDirectory).map(it -> (Directory) it).collect(toList());
     }
 
     @Override
@@ -148,15 +181,6 @@ final class Directory implements FileSystem {
             res.append("}");
         }
         return res.toString();
-    }
-
-    public List<Directory> selectDir(Predicate<Directory> predicate) {
-        List<Directory> collect = children.stream()
-                .filter(FileSystem::isDirectory)
-                .map(f -> (Directory) f)
-                .filter(predicate)
-                .collect(Collectors.toList());
-        return collect;
     }
 }
 

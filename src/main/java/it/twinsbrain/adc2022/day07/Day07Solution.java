@@ -63,13 +63,13 @@ public class Day07Solution {
         Directory root = Directory.root();
         Directory currentDir = root;
         var iterator = input.iterator();
-        iterator.next();
+        iterator.next(); // skip root
         while (iterator.hasNext()) {
             var consoleLine = iterator.next();
             if (consoleLine.startsWith("$ cd")) {
                 currentDir = execCd(currentDir, consoleLine);
             } else if (consoleLine.startsWith("$ ls")) {
-                // DO NOTHING
+                // DO NOTHING: on next iteration it will parse listed dirs or files
             } else if (consoleLine.startsWith("dir")) {
                 addDir(currentDir, consoleLine);
             } else if (consoleLine.matches("\\d+\\s.*")) {

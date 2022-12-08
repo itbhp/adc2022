@@ -21,6 +21,7 @@ public class Day07Solution {
         var input = read(resource("/day07/input.txt"));
         System.out.printf("Part 1: %s", part1(input));
         System.out.println();
+        System.out.printf("Part 2: %s", part2(input));
     }
 
     public static int part1(List<String> input) {
@@ -33,6 +34,20 @@ public class Day07Solution {
         };
         visit(root, accumulator);
         return sum.intValue();
+    }
+
+    public static int part2(List<String> input) {
+        Directory root = parse(input);
+        var currentAvailableSpace = 70_000_000 - root.size();
+        var neededSpace = 30_000_000 - currentAvailableSpace;
+        final List<Directory> candidateDirToDelete = new LinkedList<>();
+        Consumer<Directory> accumulator = dirToVisit -> {
+            if (dirToVisit.size() >= neededSpace) {
+                candidateDirToDelete.add(dirToVisit);
+            }
+        };
+        visit(root, accumulator);
+        return candidateDirToDelete.stream().mapToInt(Directory::size).min().orElse(0);
     }
 
     public static void visit(Directory root, Consumer<Directory> accumulator) {
@@ -89,17 +104,6 @@ public class Day07Solution {
         }
     }
 
-//    private static <T> List<T> visit(FileSystem f, Predicate<FileSystem> p, Function<FileSystem, T> projector){
-//        var res = new ArrayList<T>();
-//        return
-//    }
-//
-//    private static <T>List<T> visit(
-//            FileSystem f, Predicate<FileSystem> p, Function<FileSystem, T> projector, List<T> acc
-//    ){
-//
-//    }
-
 }
 
 sealed interface FileSystem permits Directory, File {
@@ -146,10 +150,6 @@ final class Directory implements FileSystem {
 
     @Override
     public int size() {
-        return memoizedSize();
-    }
-
-    private int memoizedSize() {
         if (size != -1) {
             return size;
         }

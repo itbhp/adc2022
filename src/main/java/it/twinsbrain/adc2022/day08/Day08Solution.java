@@ -65,12 +65,12 @@ public class Day08Solution {
         return checkHowManyVisibleFromIUpToSize(size, i, candidate, reader);
     }
 
-    private static int visibleFromUp(int i, int candidate, Function<Integer, Integer> reader) {
-        return checkHowManyVisibleFromJDownToZero(i, candidate, reader);
+    private static int visibleFromUp(int j, int candidate, Function<Integer, Integer> reader) {
+        return checkHowManyVisibleFromJDownToZero(j, candidate, reader);
     }
 
-    private static int visibleFromRight(int size, int j, int candidate, Function<Integer, Integer> reader) {
-        return checkHowManyVisibleFromIUpToSize(size, j, candidate, reader);
+    private static int visibleFromRight(int size, int i, int candidate, Function<Integer, Integer> reader) {
+        return checkHowManyVisibleFromIUpToSize(size, i, candidate, reader);
     }
 
     private static int visibleFromLeft(int j, int candidate, Function<Integer, Integer> reader) {

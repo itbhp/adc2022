@@ -1,9 +1,13 @@
 package it.twinsbrain.adc2022.day08;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
 import static it.twinsbrain.adc2022.day08.Day08Solution.howManyTreesAreVisible;
 import static it.twinsbrain.adc2022.day08.Day08Solution.parse;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,5 +48,24 @@ class Day08SolutionTest {
         );
 
         assertThat(howManyTreesAreVisible(input), is(21));
+    }
+
+
+    @Nested
+    class AcceptanceTest {
+        private static final List<String> input;
+
+        static {
+            try {
+                input = read(resource("/day08/input.txt"));
+            } catch (URISyntaxException e) {
+                throw new RuntimeException("input file not found!");
+            }
+        }
+
+        @Test
+        void part1Test() {
+            assertThat(howManyTreesAreVisible(input), is(1809));
+        }
     }
 }

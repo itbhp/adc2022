@@ -26,7 +26,7 @@ public class Day08Solution {
 
                 boolean visibleFromLeft = true;
                 for (int k = j - 1; k >= 0; k--) {
-                    if (candidate <= grid[i][k]) {
+                    if (isShorter(candidate, grid[i][k])) {
                         visibleFromLeft = false;
                         break;
                     }
@@ -34,7 +34,7 @@ public class Day08Solution {
 
                 boolean visibleFromRight = true;
                 for (int k = j + 1; k < gridSideSize; k++) {
-                    if (candidate <= grid[i][k]) {
+                    if (isShorter(candidate, grid[i][k])) {
                         visibleFromRight = false;
                         break;
                     }
@@ -42,7 +42,7 @@ public class Day08Solution {
 
                 boolean visibleFromUp = true;
                 for (int k = i - 1; k >= 0; k--) {
-                    if (candidate <= grid[k][j]) {
+                    if (isShorter(candidate, grid[k][j])) {
                         visibleFromUp = false;
                         break;
                     }
@@ -50,7 +50,7 @@ public class Day08Solution {
 
                 boolean visibleFromDown = true;
                 for (int k = i + 1; k < gridSideSize; k++) {
-                    if (candidate <= grid[k][j]) {
+                    if (isShorter(candidate, grid[k][j])) {
                         visibleFromDown = false;
                         break;
                     }
@@ -61,6 +61,10 @@ public class Day08Solution {
             }
         }
         return result;
+    }
+
+    private static boolean isShorter(int candidate, int i1) {
+        return candidate <= i1;
     }
 
     private static boolean onEdge(int i, int j, int gridSideSize) {

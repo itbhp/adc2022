@@ -60,6 +60,8 @@ sealed interface FileSystem permits Directory, File {
     boolean isDirectory();
 
     String name();
+
+    int size();
 }
 
 final class Directory implements FileSystem {
@@ -92,6 +94,11 @@ final class Directory implements FileSystem {
     @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public int size() {
+        return children.stream().mapToInt(FileSystem::size).sum();
     }
 
     public void addSubDir(String dirName) {
@@ -146,6 +153,7 @@ final class File implements FileSystem {
         return fileName;
     }
 
+    @Override
     public int size() {
         return size;
     }

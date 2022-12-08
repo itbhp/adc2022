@@ -27,4 +27,24 @@ class Day07SolutionTest {
         var parsed = parse(input);
         assertThat(parsed.toString(), equalTo("[/]->{b.txt(14848514),c.dat(8504156),[a]->{f(29116),g(2557)}}"));
     }
+
+    @Test
+    void dirSize() {
+        List<String> input = List.of(
+                "$ cd /",
+                "$ ls",
+                "dir a",
+                "14848514 b.txt",
+                "8504156 c.dat",
+                "$ cd a",
+                "$ ls",
+                "29116 f",
+                "2557 g"
+        );
+
+        // 14848514 + 8504156 + 29116 + 2557
+
+        var parsed = parse(input);
+        assertThat(parsed.size(), equalTo(23384343));
+    }
 }

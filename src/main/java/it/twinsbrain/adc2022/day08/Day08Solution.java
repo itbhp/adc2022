@@ -1,45 +1,56 @@
 package it.twinsbrain.adc2022.day08;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
+
 public class Day08Solution {
+
+    public static void main(String[] args) throws URISyntaxException {
+        var input = read(resource("/day08/input.txt"));
+        System.out.printf("Part 1: %s", howManyTreesAreVisible(input));
+        System.out.println();
+    }
 
     public static int howManyTreesAreVisible(List<String> input) {
         int[][] grid = parse(input);
         int gridSideSize = input.size();
-        int result = (gridSideSize * 4) - 4;
-        for (int i = 1; i < grid.length - 1; i++) {
+        int result = 0;
+
+        for (int i = 0; i < grid.length; i++) {
             var row = grid[i];
-            for (int j = 1; j < row.length - 1; j++) {
+            for (int j = 0; j < row.length; j++) {
                 var candidate = grid[i][j];
 
                 boolean visibleFromLeft = true;
-                for (int k = j - 1; k > 1; k--) {
-                    if (candidate < grid[i][k]) {
+                for (int k = j - 1; k >= 0; k--) {
+                    if (candidate <= grid[i][k]) {
                         visibleFromLeft = false;
                         break;
                     }
                 }
 
                 boolean visibleFromRight = true;
-                for (int k = j + 1; k < gridSideSize - 1; k++) {
-                    if (candidate < grid[i][k]) {
+                for (int k = j + 1; k < gridSideSize; k++) {
+                    if (candidate <= grid[i][k]) {
                         visibleFromRight = false;
                         break;
                     }
                 }
 
                 boolean visibleFromUp = true;
-                for (int k = i - 1; k > 1; k--) {
-                    if (candidate < grid[k][j]) {
+                for (int k = i - 1; k >= 0; k--) {
+                    if (candidate <= grid[k][j]) {
                         visibleFromUp = false;
                         break;
                     }
                 }
 
                 boolean visibleFromDown = true;
-                for (int k = i + 1; k < gridSideSize - 1; k++) {
-                    if (candidate < grid[k][j]) {
+                for (int k = i + 1; k < gridSideSize; k++) {
+                    if (candidate <= grid[k][j]) {
                         visibleFromDown = false;
                         break;
                     }
@@ -50,6 +61,10 @@ public class Day08Solution {
             }
         }
         return result;
+    }
+
+    private static boolean onEdge(int i, int j, int gridSideSize) {
+        return i == 0 || i == gridSideSize - 1 || j == 0 || j == gridSideSize - 1;
     }
 
     public static int[][] parse(List<String> input) {

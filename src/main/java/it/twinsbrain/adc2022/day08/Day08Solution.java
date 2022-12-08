@@ -62,22 +62,24 @@ public class Day08Solution {
     }
 
     private static int visibleFromDown(int size, int i, int candidate, Function<Integer, Integer> reader) {
-        return fromIUpToSize(size, i, candidate, reader);
+        return checkHowManyVisibleFromIUpToSize(size, i, candidate, reader);
     }
 
     private static int visibleFromUp(int i, int candidate, Function<Integer, Integer> reader) {
-        return fromJDownToZero(i, candidate, reader);
+        return checkHowManyVisibleFromJDownToZero(i, candidate, reader);
     }
 
     private static int visibleFromRight(int size, int j, int candidate, Function<Integer, Integer> reader) {
-        return fromIUpToSize(size, j, candidate, reader);
+        return checkHowManyVisibleFromIUpToSize(size, j, candidate, reader);
     }
 
     private static int visibleFromLeft(int j, int candidate, Function<Integer, Integer> reader) {
-        return fromJDownToZero(j, candidate, reader);
+        return checkHowManyVisibleFromJDownToZero(j, candidate, reader);
     }
 
-    private static int fromIUpToSize(int size, int i, int candidate, Function<Integer, Integer> reader) {
+    private static int checkHowManyVisibleFromIUpToSize(
+            int size, int i, int candidate, Function<Integer, Integer> reader
+    ) {
         var scoreDown = 0;
         for (int k = i + 1; k < size; k++) {
             scoreDown++;
@@ -88,7 +90,9 @@ public class Day08Solution {
         return scoreDown;
     }
 
-    private static int fromJDownToZero(int j, int candidate, Function<Integer, Integer> reader) {
+    private static int checkHowManyVisibleFromJDownToZero(
+            int j, int candidate, Function<Integer, Integer> reader
+    ) {
         var scoreLeft = 0;
         for (int k = j - 1; k >= 0; k--) {
             scoreLeft++;

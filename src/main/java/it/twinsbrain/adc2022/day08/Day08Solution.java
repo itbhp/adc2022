@@ -27,37 +27,10 @@ public class Day08Solution {
             var row = grid[i];
             for (int j = 0; j < row.length; j++) {
                 var candidate = grid[i][j];
-                var scoreLeft = 0;
-                for (int k = j - 1; k >= 0; k--) {
-                    scoreLeft++;
-                    if (candidate <= grid[i][k]) {
-                        break;
-                    }
-                }
-
-                var scoreRight = 0;
-                for (int k = j + 1; k < size; k++) {
-                    scoreRight++;
-                    if (candidate <= grid[i][k]) {
-                        break;
-                    }
-                }
-
-                var scoreUp = 0;
-                for (int k = i - 1; k >= 0; k--) {
-                    scoreUp++;
-                    if (candidate <= grid[k][j]) {
-                        break;
-                    }
-                }
-
-                var scoreDown = 0;
-                for (int k = i + 1; k < size; k++) {
-                    scoreDown++;
-                    if (candidate <= grid[k][j]) {
-                        break;
-                    }
-                }
+                int scoreLeft = visibleFromLeft(grid, i, j, candidate);
+                int scoreRight = visibleFromRight(grid, size, i, j, candidate);
+                int scoreUp = visibleFromUp(grid, i, j, candidate);
+                int scoreDown = visibleFromDown(grid, size, i, j, candidate);
                 var scenicScore = scoreDown * scoreUp * scoreLeft * scoreRight;
                 if (scenicScore > max) {
                     max = scenicScore;
@@ -65,6 +38,50 @@ public class Day08Solution {
             }
         }
         return max;
+    }
+
+    private static int visibleFromDown(int[][] grid, int size, int i, int j, int candidate) {
+        var scoreDown = 0;
+        for (int k = i + 1; k < size; k++) {
+            scoreDown++;
+            if (candidate <= grid[k][j]) {
+                break;
+            }
+        }
+        return scoreDown;
+    }
+
+    private static int visibleFromUp(int[][] grid, int i, int j, int candidate) {
+        var scoreUp = 0;
+        for (int k = i - 1; k >= 0; k--) {
+            scoreUp++;
+            if (candidate <= grid[k][j]) {
+                break;
+            }
+        }
+        return scoreUp;
+    }
+
+    private static int visibleFromRight(int[][] grid, int size, int i, int j, int candidate) {
+        var scoreRight = 0;
+        for (int k = j + 1; k < size; k++) {
+            scoreRight++;
+            if (candidate <= grid[i][k]) {
+                break;
+            }
+        }
+        return scoreRight;
+    }
+
+    private static int visibleFromLeft(int[][] grid, int i, int j, int candidate) {
+        var scoreLeft = 0;
+        for (int k = j - 1; k >= 0; k--) {
+            scoreLeft++;
+            if (candidate <= grid[i][k]) {
+                break;
+            }
+        }
+        return scoreLeft;
     }
 
     public static int howManyTreesAreVisible(List<String> input) {

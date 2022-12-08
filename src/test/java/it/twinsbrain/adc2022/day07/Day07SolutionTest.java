@@ -12,7 +12,7 @@ import static it.twinsbrain.adc2022.day07.Day07Solution.parse;
 import static it.twinsbrain.adc2022.day07.Day07Solution.part1;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.is;
 
 class Day07SolutionTest {
 
@@ -68,7 +68,7 @@ class Day07SolutionTest {
 
         @Test
         void part1Test() {
-            assertThat(part1(input), lessThan(46582233));
+            assertThat(part1(input), is(1334506));
         }
     }
 }

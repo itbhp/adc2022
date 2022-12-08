@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -23,17 +25,24 @@ public class Day07Solution {
 
     public static int part1(List<String> input) {
         Directory root = parse(input);
-        int sum = 0;
+        final AtomicInteger sum = new AtomicInteger(0);
+        Consumer<Directory> accumulator = dirToVisit -> {
+            if (dirToVisit.size() < 100_000) {
+                sum.addAndGet(dirToVisit.size());
+            }
+        };
+        visit(root, accumulator);
+        return sum.intValue();
+    }
+
+    public static void visit(Directory root, Consumer<Directory> accumulator) {
         var unvisitedDir = new LinkedList<Directory>();
         unvisitedDir.push(root);
         while (!unvisitedDir.isEmpty()) {
             var dirToVisit = unvisitedDir.pop();
-            if (dirToVisit.size() < 100_000) {
-                sum += dirToVisit.size();
-            }
+            accumulator.accept(dirToVisit);
             dirToVisit.allSubDirs().forEach(unvisitedDir::push);
         }
-        return sum;
     }
 
     public static Directory parse(List<String> input) {

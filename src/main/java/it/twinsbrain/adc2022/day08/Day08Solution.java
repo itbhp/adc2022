@@ -15,6 +15,56 @@ public class Day08Solution {
         var input = read(resource("/day08/input.txt"));
         System.out.printf("Part 1: %s", howManyTreesAreVisible(input));
         System.out.println();
+        System.out.printf("Part 2: %s", highestScenicScore(input));
+    }
+
+    public static int highestScenicScore(List<String> input) {
+        int[][] grid = parse(input);
+        int size = input.size();
+        int max = Integer.MIN_VALUE;
+
+        for (int i = 0; i < grid.length; i++) {
+            var row = grid[i];
+            for (int j = 0; j < row.length; j++) {
+                var candidate = grid[i][j];
+                var scoreLeft = 0;
+                for (int k = j - 1; k >= 0; k--) {
+                    scoreLeft++;
+                    if (candidate <= grid[i][k]) {
+                        break;
+                    }
+                }
+
+                var scoreRight = 0;
+                for (int k = j + 1; k < size; k++) {
+                    scoreRight++;
+                    if (candidate <= grid[i][k]) {
+                        break;
+                    }
+                }
+
+                var scoreUp = 0;
+                for (int k = i - 1; k >= 0; k--) {
+                    scoreUp++;
+                    if (candidate <= grid[k][j]) {
+                        break;
+                    }
+                }
+
+                var scoreDown = 0;
+                for (int k = i + 1; k < size; k++) {
+                    scoreDown++;
+                    if (candidate <= grid[k][j]) {
+                        break;
+                    }
+                }
+                var scenicScore = scoreDown * scoreUp * scoreLeft * scoreRight;
+                if (scenicScore > max) {
+                    max = scenicScore;
+                }
+            }
+        }
+        return max;
     }
 
     public static int howManyTreesAreVisible(List<String> input) {

@@ -1,16 +1,34 @@
 package it.twinsbrain.adc2022.day07;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
 import static java.util.stream.Collectors.joining;
 
 public class Day07Solution {
 
-    public static FileSystem parse(List<String> input) {
+    public static void main(String[] args) throws URISyntaxException {
+        var input = read(resource("/day07/input.txt"));
+        System.out.printf("Part 1: %s", part1(input));
+        System.out.println();
+    }
+
+    public static int part1(List<String> input) {
+        Directory root = parse(input);
+        return root.selectDir(d -> d.size() > 100000)
+                .stream()
+                .mapToInt(Directory::size)
+                .sum();
+    }
+
+    public static Directory parse(List<String> input) {
         var filePattern = Pattern.compile("(\\d+) (.*)");
         Directory root = Directory.root();
         Directory currentDir = root;
@@ -130,6 +148,15 @@ final class Directory implements FileSystem {
             res.append("}");
         }
         return res.toString();
+    }
+
+    public List<Directory> selectDir(Predicate<Directory> predicate) {
+        List<Directory> collect = children.stream()
+                .filter(FileSystem::isDirectory)
+                .map(f -> (Directory) f)
+                .filter(predicate)
+                .collect(Collectors.toList());
+        return collect;
     }
 }
 

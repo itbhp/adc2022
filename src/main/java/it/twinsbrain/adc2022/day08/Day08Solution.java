@@ -44,7 +44,7 @@ public class Day08Solution {
         var scoreDown = 0;
         for (int k = i + 1; k < size; k++) {
             scoreDown++;
-            if (candidate <= grid[k][j]) {
+            if (isShorter(candidate, grid[k][j])) {
                 break;
             }
         }
@@ -55,7 +55,7 @@ public class Day08Solution {
         var scoreUp = 0;
         for (int k = i - 1; k >= 0; k--) {
             scoreUp++;
-            if (candidate <= grid[k][j]) {
+            if (isShorter(candidate, grid[k][j])) {
                 break;
             }
         }
@@ -66,7 +66,7 @@ public class Day08Solution {
         var scoreRight = 0;
         for (int k = j + 1; k < size; k++) {
             scoreRight++;
-            if (candidate <= grid[i][k]) {
+            if (isShorter(candidate, grid[i][k])) {
                 break;
             }
         }
@@ -77,7 +77,7 @@ public class Day08Solution {
         var scoreLeft = 0;
         for (int k = j - 1; k >= 0; k--) {
             scoreLeft++;
-            if (candidate <= grid[i][k]) {
+            if (isShorter(candidate, grid[i][k])) {
                 break;
             }
         }
@@ -111,8 +111,8 @@ public class Day08Solution {
         return range.noneMatch(k -> isShorter(candidate, reader.apply(k)));
     }
 
-    private static boolean isShorter(int candidate, int i1) {
-        return candidate <= i1;
+    private static boolean isShorter(int candidate, int other) {
+        return candidate <= other;
     }
 
     public static int[][] parse(List<String> input) {

@@ -27,8 +27,9 @@ public class Day08Solution {
             var row = grid[i];
             for (int j = 0; j < row.length; j++) {
                 var candidate = grid[i][j];
+                int fI = i;
                 int scoreLeft = visibleFromLeft(grid, i, j, candidate);
-                int scoreRight = visibleFromRight(grid, size, i, j, candidate);
+                int scoreRight = visibleFromRight(size, j, candidate, k -> grid[fI][k]);
                 int scoreUp = visibleFromUp(grid, i, j, candidate);
                 int scoreDown = visibleFromDown(grid, size, i, j, candidate);
                 var scenicScore = scoreDown * scoreUp * scoreLeft * scoreRight;
@@ -62,11 +63,11 @@ public class Day08Solution {
         return scoreUp;
     }
 
-    private static int visibleFromRight(int[][] grid, int size, int i, int j, int candidate) {
+    private static int visibleFromRight(int size, int j, int candidate, Function<Integer, Integer> reader) {
         var scoreRight = 0;
         for (int k = j + 1; k < size; k++) {
             scoreRight++;
-            if (isShorter(candidate, grid[i][k])) {
+            if (isShorter(candidate, reader.apply(k))) {
                 break;
             }
         }

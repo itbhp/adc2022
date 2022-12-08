@@ -2,6 +2,8 @@ package it.twinsbrain.adc2022.day08;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static it.twinsbrain.adc2022.FilesModule.read;
 import static it.twinsbrain.adc2022.FilesModule.resource;
@@ -16,45 +18,23 @@ public class Day08Solution {
 
     public static int howManyTreesAreVisible(List<String> input) {
         int[][] grid = parse(input);
-        int gridSideSize = input.size();
+        int size = input.size();
         int result = 0;
 
         for (int i = 0; i < grid.length; i++) {
             var row = grid[i];
             for (int j = 0; j < row.length; j++) {
                 var candidate = grid[i][j];
-
-                boolean visibleFromLeft = true;
-                for (int k = j - 1; k >= 0; k--) {
-                    if (isShorter(candidate, grid[i][k])) {
-                        visibleFromLeft = false;
-                        break;
-                    }
-                }
-
-                boolean visibleFromRight = true;
-                for (int k = j + 1; k < gridSideSize; k++) {
-                    if (isShorter(candidate, grid[i][k])) {
-                        visibleFromRight = false;
-                        break;
-                    }
-                }
-
-                boolean visibleFromUp = true;
-                for (int k = i - 1; k >= 0; k--) {
-                    if (isShorter(candidate, grid[k][j])) {
-                        visibleFromUp = false;
-                        break;
-                    }
-                }
-
-                boolean visibleFromDown = true;
-                for (int k = i + 1; k < gridSideSize; k++) {
-                    if (isShorter(candidate, grid[k][j])) {
-                        visibleFromDown = false;
-                        break;
-                    }
-                }
+                int finalI = i;
+                int finalJ = j;
+                boolean visibleFromLeft =
+                        isVisibleInRange(IntStream.range(0, j), candidate, (k) -> grid[finalI][k]);
+                boolean visibleFromRight =
+                        isVisibleInRange(IntStream.range(j + 1, size), candidate, (k) -> grid[finalI][k]);
+                boolean visibleFromUp =
+                        isVisibleInRange(IntStream.range(0, i), candidate, (k) -> grid[k][finalJ]);
+                boolean visibleFromDown =
+                        isVisibleInRange(IntStream.range(i + 1, size), candidate, (k) -> grid[k][finalJ]);
                 if (visibleFromDown || visibleFromUp || visibleFromLeft || visibleFromRight) {
                     result++;
                 }
@@ -63,12 +43,12 @@ public class Day08Solution {
         return result;
     }
 
-    private static boolean isShorter(int candidate, int i1) {
-        return candidate <= i1;
+    private static boolean isVisibleInRange(IntStream range, int candidate, Function<Integer, Integer> reader) {
+        return range.noneMatch(k -> isShorter(candidate, reader.apply(k)));
     }
 
-    private static boolean onEdge(int i, int j, int gridSideSize) {
-        return i == 0 || i == gridSideSize - 1 || j == 0 || j == gridSideSize - 1;
+    private static boolean isShorter(int candidate, int i1) {
+        return candidate <= i1;
     }
 
     public static int[][] parse(List<String> input) {

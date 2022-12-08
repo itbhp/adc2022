@@ -2,6 +2,7 @@ package it.twinsbrain.adc2022.day08;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -19,28 +20,24 @@ public class Day08Solution {
     public static int howManyTreesAreVisible(List<String> input) {
         int[][] grid = parse(input);
         int size = input.size();
-        int result = 0;
+        AtomicInteger result = new AtomicInteger(0);
 
-        for (int i = 0; i < grid.length; i++) {
-            var row = grid[i];
-            for (int j = 0; j < row.length; j++) {
-                var candidate = grid[i][j];
-                int finalI = i;
-                int finalJ = j;
-                boolean visibleFromLeft =
-                        isVisibleInRange(IntStream.range(0, j), candidate, (k) -> grid[finalI][k]);
-                boolean visibleFromRight =
-                        isVisibleInRange(IntStream.range(j + 1, size), candidate, (k) -> grid[finalI][k]);
-                boolean visibleFromUp =
-                        isVisibleInRange(IntStream.range(0, i), candidate, (k) -> grid[k][finalJ]);
-                boolean visibleFromDown =
-                        isVisibleInRange(IntStream.range(i + 1, size), candidate, (k) -> grid[k][finalJ]);
-                if (visibleFromDown || visibleFromUp || visibleFromLeft || visibleFromRight) {
-                    result++;
-                }
-            }
-        }
-        return result;
+        IntStream.range(0, size).forEach(i ->
+                IntStream.range(0, size).forEach(j -> {
+                    var candidate = grid[i][j];
+                    boolean visibleFromLeft =
+                            isVisibleInRange(IntStream.range(0, j), candidate, (k) -> grid[i][k]);
+                    boolean visibleFromRight =
+                            isVisibleInRange(IntStream.range(j + 1, size), candidate, (k) -> grid[i][k]);
+                    boolean visibleFromUp =
+                            isVisibleInRange(IntStream.range(0, i), candidate, (k) -> grid[k][j]);
+                    boolean visibleFromDown =
+                            isVisibleInRange(IntStream.range(i + 1, size), candidate, (k) -> grid[k][j]);
+                    if (visibleFromDown || visibleFromUp || visibleFromLeft || visibleFromRight) {
+                        result.incrementAndGet();
+                    }
+                }));
+        return result.get();
     }
 
     private static boolean isVisibleInRange(IntStream range, int candidate, Function<Integer, Integer> reader) {

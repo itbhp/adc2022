@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static it.twinsbrain.adc2022.day08.Day08Solution.howManyTreesAreVisible;
 import static it.twinsbrain.adc2022.day08.Day08Solution.parse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class Day08SolutionTest {
@@ -28,5 +31,18 @@ class Day08SolutionTest {
         };
 
         assertArrayEquals(parse(input), expected);
+    }
+
+    @Test
+    void part1ShouldWork() {
+        var input = List.of(
+                "30373",
+                "25512",
+                "65332",
+                "33549",
+                "35390"
+        );
+
+        assertThat(howManyTreesAreVisible(input), is(21));
     }
 }

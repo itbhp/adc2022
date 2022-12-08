@@ -28,10 +28,11 @@ public class Day08Solution {
             for (int j = 0; j < row.length; j++) {
                 var candidate = grid[i][j];
                 int fI = i;
-                int scoreLeft = visibleFromLeft(grid, i, j, candidate);
+                int fJ = j;
+                int scoreLeft = visibleFromLeft(j, candidate, k -> grid[fI][k]);
                 int scoreRight = visibleFromRight(size, j, candidate, k -> grid[fI][k]);
-                int scoreUp = visibleFromUp(grid, i, j, candidate);
-                int scoreDown = visibleFromDown(grid, size, i, j, candidate);
+                int scoreUp = visibleFromUp(i, candidate, k -> grid[k][fJ]);
+                int scoreDown = visibleFromDown(size, i, candidate, k -> grid[k][fJ]);
                 var scenicScore = scoreDown * scoreUp * scoreLeft * scoreRight;
                 if (scenicScore > max) {
                     max = scenicScore;
@@ -41,44 +42,38 @@ public class Day08Solution {
         return max;
     }
 
-    private static int visibleFromDown(int[][] grid, int size, int i, int j, int candidate) {
+    private static int visibleFromDown(int size, int i, int candidate, Function<Integer, Integer> reader) {
+        return fromIUpToSize(size, i, candidate, reader);
+    }
+
+    private static int visibleFromUp(int i, int candidate, Function<Integer, Integer> reader) {
+        return fromJDownToZero(i, candidate, reader);
+    }
+
+    private static int visibleFromRight(int size, int j, int candidate, Function<Integer, Integer> reader) {
+        return fromIUpToSize(size, j, candidate, reader);
+    }
+
+    private static int visibleFromLeft(int j, int candidate, Function<Integer, Integer> reader) {
+        return fromJDownToZero(j, candidate, reader);
+    }
+
+    private static int fromIUpToSize(int size, int i, int candidate, Function<Integer, Integer> reader) {
         var scoreDown = 0;
         for (int k = i + 1; k < size; k++) {
             scoreDown++;
-            if (isShorter(candidate, grid[k][j])) {
+            if (isShorter(candidate, reader.apply(k))) {
                 break;
             }
         }
         return scoreDown;
     }
 
-    private static int visibleFromUp(int[][] grid, int i, int j, int candidate) {
-        var scoreUp = 0;
-        for (int k = i - 1; k >= 0; k--) {
-            scoreUp++;
-            if (isShorter(candidate, grid[k][j])) {
-                break;
-            }
-        }
-        return scoreUp;
-    }
-
-    private static int visibleFromRight(int size, int j, int candidate, Function<Integer, Integer> reader) {
-        var scoreRight = 0;
-        for (int k = j + 1; k < size; k++) {
-            scoreRight++;
-            if (isShorter(candidate, reader.apply(k))) {
-                break;
-            }
-        }
-        return scoreRight;
-    }
-
-    private static int visibleFromLeft(int[][] grid, int i, int j, int candidate) {
+    private static int fromJDownToZero(int j, int candidate, Function<Integer, Integer> reader) {
         var scoreLeft = 0;
         for (int k = j - 1; k >= 0; k--) {
             scoreLeft++;
-            if (isShorter(candidate, grid[i][k])) {
+            if (isShorter(candidate, reader.apply(k))) {
                 break;
             }
         }

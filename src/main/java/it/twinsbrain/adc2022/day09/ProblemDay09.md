@@ -263,7 +263,7 @@ again marks the starting position (which the tail also visited) and # marks othe
 .####.
 ....#.
 s###..
-```
+``` 
 
 So, there are 13 positions the tail visited at least once.
 

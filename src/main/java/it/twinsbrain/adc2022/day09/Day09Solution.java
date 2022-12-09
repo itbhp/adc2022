@@ -11,7 +11,7 @@ public class Day09Solution {
         List<Command> commands = parseCommands(input);
         var journey = new Journey();
         commands.forEach(journey::accept);
-        return journey.tailPositions();
+        return journey.howManyTailUniquePositions();
     }
 
     public static List<Command> parseCommands(List<String> input) {
@@ -74,7 +74,7 @@ public class Day09Solution {
             }
         }
 
-        public int tailPositions() {
+        public int howManyTailUniquePositions() {
             return 0;
         }
     }

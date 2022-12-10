@@ -2,6 +2,7 @@ package it.twinsbrain.adc2022.day09;
 
 import java.net.URISyntaxException;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ public class Day09Solution {
 
     public static int part1(List<String> input) {
         List<Command> commands = parseCommands(input);
-        var journey = new Journey();
+        var journey = new Journey(2);
         commands.forEach(journey::accept);
         return journey.howManyTailUniquePositions();
     }
@@ -89,35 +90,50 @@ public class Day09Solution {
      */
     static class Journey {
 
-        private Point head = new Point(0, 0);
-        private Point tail = new Point(0, 0);
+        private final LinkedList<Point> queue;
         private final Set<Point> tailTrail = new HashSet<>();
 
-        public Journey() {
+        public Journey(int numberOfKnots) {
+            queue = new LinkedList<>();
+            for (int i = 0; i < numberOfKnots; i++) {
+                queue.add(new Point(0, 0));
+            }
             tailTrail.add(new Point(0, 0));
         }
 
         public void accept(Command command) {
             switch (command) {
                 case Left steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
-                    head = new Point(head.x - 1, head.y);
-                    tail = updatedFollower(tail, head);
-                    addTrail(tail);
+                    Point head = queue.get(0);
+                    queue.set(0, new Point(head.x - 1, head.y));
+                    for (int i = 1; i < queue.size(); i++) {
+                        queue.set(i, updatedFollower(queue.get(i), queue.get(i - 1)));
+                    }
+                    addTrail(queue.getLast());
                 });
                 case Right steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
-                    head = new Point(head.x + 1, head.y);
-                    tail = updatedFollower(tail, head);
-                    addTrail(tail);
+                    Point head = queue.get(0);
+                    queue.set(0, new Point(head.x + 1, head.y));
+                    for (int i = 1; i < queue.size(); i++) {
+                        queue.set(i, updatedFollower(queue.get(i), queue.get(i - 1)));
+                    }
+                    addTrail(queue.getLast());
                 });
                 case Up steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
-                    head = new Point(head.x, head.y - 1);
-                    tail = updatedFollower(tail, head);
-                    addTrail(tail);
+                    Point head = queue.get(0);
+                    queue.set(0, new Point(head.x, head.y - 1));
+                    for (int i = 1; i < queue.size(); i++) {
+                        queue.set(i, updatedFollower(queue.get(i), queue.get(i - 1)));
+                    }
+                    addTrail(queue.getLast());
                 });
                 case Down steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
-                    head = new Point(head.x, head.y + 1);
-                    tail = updatedFollower(tail, head);
-                    addTrail(tail);
+                    Point head = queue.get(0);
+                    queue.set(0, new Point(head.x, head.y + 1));
+                    for (int i = 1; i < queue.size(); i++) {
+                        queue.set(i, updatedFollower(queue.get(i), queue.get(i - 1)));
+                    }
+                    addTrail(queue.getLast());
                 });
             }
         }
@@ -125,14 +141,23 @@ public class Day09Solution {
         private Point updatedFollower(Point follower, Point leader) {
 
             if (follower.sameRow(leader) && follower.xDistance(leader) > 1) {
+
                 return new Point(follower.x + 1, follower.y);
+
             } else if (follower.sameColumn(leader) && follower.yDistance(leader) > 1) {
+
                 return new Point(follower.x, follower.y + 1);
+
             } else if (follower.sameRow(leader) && follower.xDistance(leader) < -1) {
+
                 return new Point(follower.x - 1, follower.y);
+
             } else if (follower.sameColumn(leader) && follower.yDistance(leader) < -1) {
+
                 return new Point(follower.x, follower.y - 1);
+
             } else if (!follower.sameColumn(leader) && !follower.sameRow(leader)) {
+
                 var xDistance = follower.xDistance(leader);
                 var yDistance = follower.yDistance(leader);
                 if (abs(xDistance) != 1 || abs(yDistance) != 1) {
@@ -140,9 +165,11 @@ public class Day09Solution {
                     var deltaY = computeDelta(yDistance);
                     return new Point(follower.x + deltaX, follower.y + deltaY);
                 }
-                return tail;
+                return follower;
+
             } else {
-                return tail;
+
+                return follower;
             }
         }
 
@@ -161,5 +188,4 @@ public class Day09Solution {
             return tailTrail.size();
         }
     }
-
 }

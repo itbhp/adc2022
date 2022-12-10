@@ -1,14 +1,23 @@
 package it.twinsbrain.adc2022.day09;
 
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
 import static java.lang.Math.abs;
 
 public class Day09Solution {
+
+    public static void main(String[] args) throws URISyntaxException {
+        var input = read(resource("/day09/input.txt"));
+        System.out.printf("Part 1: %s", part1(input));
+        System.out.println();
+    }
 
     public static int part1(List<String> input) {
         List<Command> commands = parseCommands(input);

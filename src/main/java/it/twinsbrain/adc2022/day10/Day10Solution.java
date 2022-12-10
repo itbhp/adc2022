@@ -18,6 +18,8 @@ public class Day10Solution {
         var input = read(resource("/day10/input.txt"));
         System.out.printf("Part 1: %s", part1(input));
         System.out.println();
+        System.out.println("Part 2");
+        part2(input);
     }
 
 
@@ -42,6 +44,19 @@ public class Day10Solution {
         return signalStrengthObserver.strength();
     }
 
+    public static void part2(List<String> input) {
+        Queue<Instruction> instructions = parse(input);
+        var observer = new DisplayObserver();
+        var cpu = new Cpu(observer);
+        IntStream.range(0, 240).forEach(cycle -> {
+            if (cpu.canProcessNextInstruction()) {
+                cpu.process(cycle, instructions.poll());
+            } else {
+                cpu.process(cycle);
+            }
+        });
+    }
+
     public static LinkedList<Instruction> parse(List<String> input) {
         return input.stream()
                 .map(Day10Solution::rowToInstruction)
@@ -59,11 +74,8 @@ public class Day10Solution {
     sealed interface Instruction {
     }
 
-    final static class NoOp implements Instruction {
-        private NoOp() {
-        }
-
-        public static final NoOp INSTANCE = new NoOp();
+    enum NoOp implements Instruction {
+        INSTANCE
     }
 
     record Add(int value) implements Instruction {
@@ -114,6 +126,29 @@ public class Day10Solution {
     @FunctionalInterface
     interface CpuObserver {
         void onCycle(int cycleCount, int registerValue);
+    }
+
+
+    static class DisplayObserver implements CpuObserver {
+        private static final Integer SIZE = 40;
+
+        @Override
+        public void onCycle(int cycleCount, int registerValue) {
+            if (cycleCount % SIZE == 0) {
+                System.out.print("\n");
+            }
+            int cursorPos = cycleCount % SIZE;
+            if (cursorInSpriteRange(registerValue, cursorPos)) {
+                System.out.print("#");
+            } else {
+                System.out.print(".");
+            }
+
+        }
+
+        private static boolean cursorInSpriteRange(int registerValue, int cursorPos) {
+            return cursorPos >= registerValue && cursorPos < registerValue + 2;
+        }
     }
 
     static class SignalStrengthObserver implements CpuObserver {

@@ -16,13 +16,14 @@ public class Day09Solution {
 
     public static void main(String[] args) throws URISyntaxException {
         var input = read(resource("/day09/input.txt"));
-        System.out.printf("Part 1: %s", part1(input));
+        System.out.printf("Part 1: %s", tailPositions(input, 2));
         System.out.println();
+        System.out.printf("Part 2: %s", tailPositions(input, 10));
     }
 
-    public static int part1(List<String> input) {
+    public static int tailPositions(List<String> input, int numberOfKnots) {
         List<Command> commands = parseCommands(input);
-        var journey = new Journey(2);
+        var journey = new Journey(numberOfKnots);
         commands.forEach(journey::accept);
         return journey.howManyTailUniquePositions();
     }

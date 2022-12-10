@@ -9,7 +9,7 @@ import java.util.List;
 import static it.twinsbrain.adc2022.FilesModule.read;
 import static it.twinsbrain.adc2022.FilesModule.resource;
 import static it.twinsbrain.adc2022.day09.Day09Solution.parseCommands;
-import static it.twinsbrain.adc2022.day09.Day09Solution.part1;
+import static it.twinsbrain.adc2022.day09.Day09Solution.tailPositions;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -45,7 +45,7 @@ class Day09SolutionTest {
 
     @Test
     void part1_should_work() {
-        assertThat(part1(input), is(13));
+        assertThat(tailPositions(input, 2), is(13));
     }
 
     @Nested
@@ -63,7 +63,12 @@ class Day09SolutionTest {
 
         @Test
         void part1_test() {
-            assertThat(part1(input), equalTo(6563));
+            assertThat(tailPositions(input, 2), equalTo(6563));
+        }
+
+        @Test
+        void part2_test() {
+            assertThat(tailPositions(input, 10), equalTo(2653));
         }
     }
 }

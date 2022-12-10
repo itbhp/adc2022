@@ -2,6 +2,7 @@ package it.twinsbrain.adc2022.day09;
 
 import java.net.URISyntaxException;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -76,6 +77,18 @@ public class Day09Solution {
         }
     }
 
+
+    static class Rope {
+        private LinkedList<Point> points;
+
+        public Rope(int size) {
+            this.points = new LinkedList<>();
+            for (int i = 0; i < size; i++) {
+                points.add(new Point(0, 0));
+            }
+        }
+    }
+
     /**
      * Imagine a Cartesian reference like this:
      * (0,0)
@@ -88,63 +101,65 @@ public class Day09Solution {
      * Both head and tail start at (0,0).
      */
     static class Journey {
+
+        private Rope rope = new Rope(2);
         private Point head = new Point(0, 0);
         private Point tail = new Point(0, 0);
         private final Set<Point> tailTrail = new HashSet<>();
+        private final Set<Point> tailTrail2 = new HashSet<>();
 
         public Journey() {
+            tailTrail2.add(new Point(0, 0));
             tailTrail.add(tail);
         }
 
         public void accept(Command command) {
             switch (command) {
                 case Left steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
+
                     head = new Point(head.x - 1, head.y);
-                    updateTail();
+                    tail = updatedFollower(tail, head);
+                    addTrail(tail);
                 });
                 case Right steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
                     head = new Point(head.x + 1, head.y);
-                    updateTail();
+                    tail = updatedFollower(tail, head);
+                    addTrail(tail);
                 });
                 case Up steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
                     head = new Point(head.x, head.y - 1);
-                    updateTail();
+                    tail = updatedFollower(tail, head);
+                    addTrail(tail);
                 });
                 case Down steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
                     head = new Point(head.x, head.y + 1);
-                    updateTail();
+                    tail = updatedFollower(tail, head);
+                    addTrail(tail);
                 });
             }
         }
 
-        private void updateTail() {
+        private Point updatedFollower(Point follower, Point leader) {
 
-            if (tail.sameRow(head) && tail.xDistance(head) > 1) {
-                var newTail = new Point(tail.x + 1, tail.y);
-                tail = newTail;
-                addTrail(newTail);
-            } else if (tail.sameColumn(head) && tail.yDistance(head) > 1) {
-                var newTail = new Point(tail.x, tail.y + 1);
-                tail = newTail;
-                addTrail(newTail);
-            } else if (tail.sameRow(head) && tail.xDistance(head) < -1) {
-                var newTail = new Point(tail.x - 1, tail.y);
-                tail = newTail;
-                addTrail(newTail);
-            } else if (tail.sameColumn(head) && tail.yDistance(head) < -1) {
-                var newTail = new Point(tail.x, tail.y - 1);
-                tail = newTail;
-                addTrail(newTail);
-            } else if (!tail.sameColumn(head) && !tail.sameRow(head)) {
-                var xDistance = tail.xDistance(head);
-                var yDistance = tail.yDistance(head);
+            if (follower.sameRow(leader) && follower.xDistance(leader) > 1) {
+                return new Point(follower.x + 1, follower.y);
+            } else if (follower.sameColumn(leader) && follower.yDistance(leader) > 1) {
+                return new Point(follower.x, follower.y + 1);
+            } else if (follower.sameRow(leader) && follower.xDistance(leader) < -1) {
+                return new Point(follower.x - 1, follower.y);
+            } else if (follower.sameColumn(leader) && follower.yDistance(leader) < -1) {
+                return new Point(follower.x, follower.y - 1);
+            } else if (!follower.sameColumn(leader) && !follower.sameRow(leader)) {
+                var xDistance = follower.xDistance(leader);
+                var yDistance = follower.yDistance(leader);
                 if (abs(xDistance) != 1 || abs(yDistance) != 1) {
                     var deltaX = computeDelta(xDistance);
                     var deltaY = computeDelta(yDistance);
-                    var newTail = new Point(tail.x + deltaX, tail.y + deltaY);
-                    tail = newTail;
-                    addTrail(newTail);
+                    return new Point(follower.x + deltaX, follower.y + deltaY);
                 }
+                return tail;
+            } else {
+                return tail;
             }
         }
 

@@ -90,7 +90,7 @@ public class Day09Solution {
         public void accept(Command command) {
             switch (command) {
                 case Left steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
-                    head = new Point(head.x - step, head.y);
+                    head = new Point(head.x - 1, head.y);
                     updateTail();
                 });
                 case Right steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {

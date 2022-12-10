@@ -1,7 +1,10 @@
 package it.twinsbrain.adc2022.day10;
 
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -126,6 +129,7 @@ public class Day10Solution {
 
     static class DisplayObserver implements CpuObserver {
         private static final Integer SIZE = 40;
+        public static final int SPRITE_SIZE = 3;
 
         @Override
         public void onCycle(int cycleCount, int registerValue) {
@@ -142,10 +146,7 @@ public class Day10Solution {
         }
 
         private static boolean cursorInSpriteRange(int registerValue, int cursorPos) {
-            Set<Integer> range = IntStream.range(registerValue, registerValue + 3)
-                    .mapToObj(Integer::valueOf)
-                    .collect(Collectors.toSet());
-            return range.contains(cursorPos);
+            return cursorPos >= registerValue && cursorPos < registerValue + SPRITE_SIZE;
         }
     }
 

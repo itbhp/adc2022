@@ -85,14 +85,13 @@ public class Day10Solution {
 
         public void process(int cycle, Instruction instruction) {
             currentInstruction = Optional.ofNullable(instruction);
-            currentInstruction.map(i -> {
+            currentInstruction.ifPresent(i -> {
                 switch (i) {
                     case Add ignored -> pendingInstruction = true;
                     case NoOp ignoredNoOp -> {
                         pendingInstruction = false;
                     }
                 }
-                return null;
             });
             if (!pendingInstruction) {
                 currentInstruction = Optional.empty();
@@ -102,10 +101,9 @@ public class Day10Solution {
 
         public void process(int cycle) {
             observer.onCycle(cycle, registerX);
-            currentInstruction.map(current -> {
+            currentInstruction.ifPresent(current -> {
                 registerX = registerX + ((Add) current).value;
                 pendingInstruction = false;
-                return null;
             });
             if (!pendingInstruction) {
                 currentInstruction = Optional.empty();

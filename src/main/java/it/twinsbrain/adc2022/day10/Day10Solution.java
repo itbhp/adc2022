@@ -1,5 +1,6 @@
 package it.twinsbrain.adc2022.day10;
 
+import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +9,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
+
 public class Day10Solution {
+
+    public static void main(String[] args) throws URISyntaxException {
+        var input = read(resource("/day10/input.txt"));
+        System.out.printf("Part 1: %s", part1(input));
+        System.out.println();
+    }
 
 
     public static int part1(List<String> input) {
@@ -91,6 +101,7 @@ public class Day10Solution {
         }
 
         public void process(int cycle) {
+            observer.onCycle(cycle, registerX);
             currentInstruction.map(current -> {
                 registerX = registerX + ((Add) current).value;
                 pendingInstruction = false;
@@ -99,7 +110,6 @@ public class Day10Solution {
             if (!pendingInstruction) {
                 currentInstruction = Optional.empty();
             }
-            observer.onCycle(cycle, registerX);
         }
     }
 

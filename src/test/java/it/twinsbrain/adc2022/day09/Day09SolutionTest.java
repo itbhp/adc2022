@@ -1,9 +1,13 @@
 package it.twinsbrain.adc2022.day09;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
 import static it.twinsbrain.adc2022.day09.Day09Solution.parseCommands;
 import static it.twinsbrain.adc2022.day09.Day09Solution.part1;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,5 +46,24 @@ class Day09SolutionTest {
     @Test
     void part1_should_work() {
         assertThat(part1(input), is(13));
+    }
+
+    @Nested
+    class AcceptanceTest {
+
+        private static final List<String> input;
+
+        static {
+            try {
+                input = read(resource("/day09/input.txt"));
+            } catch (URISyntaxException e) {
+                throw new RuntimeException("input file not found!");
+            }
+        }
+
+        @Test
+        void part1_test() {
+            assertThat(part1(input), equalTo(6563));
+        }
     }
 }

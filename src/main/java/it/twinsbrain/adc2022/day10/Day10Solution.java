@@ -1,10 +1,7 @@
 package it.twinsbrain.adc2022.day10;
 
 import java.net.URISyntaxException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -19,7 +16,7 @@ public class Day10Solution {
         System.out.printf("Part 1: %s", part1(input));
         System.out.println();
         System.out.println("Part 2");
-        part2(input);
+        part2(input); // PLPAFBCL
     }
 
 
@@ -48,7 +45,7 @@ public class Day10Solution {
         Queue<Instruction> instructions = parse(input);
         var observer = new DisplayObserver();
         var cpu = new Cpu(observer);
-        IntStream.range(0, 240).forEach(cycle -> {
+        IntStream.range(1, 241).forEach(cycle -> {
             if (cpu.canProcessNextInstruction()) {
                 cpu.process(cycle, instructions.poll());
             } else {
@@ -100,9 +97,7 @@ public class Day10Solution {
             currentInstruction.ifPresent(i -> {
                 switch (i) {
                     case Add ignored -> pendingInstruction = true;
-                    case NoOp ignoredNoOp -> {
-                        pendingInstruction = false;
-                    }
+                    case NoOp ignoredNoOp -> pendingInstruction = false;
                 }
             });
             if (!pendingInstruction) {
@@ -134,7 +129,7 @@ public class Day10Solution {
 
         @Override
         public void onCycle(int cycleCount, int registerValue) {
-            if (cycleCount % SIZE == 0) {
+            if ((cycleCount - 1) % SIZE == 0) {
                 System.out.print("\n");
             }
             int cursorPos = cycleCount % SIZE;
@@ -147,7 +142,10 @@ public class Day10Solution {
         }
 
         private static boolean cursorInSpriteRange(int registerValue, int cursorPos) {
-            return cursorPos >= registerValue && cursorPos < registerValue + 2;
+            Set<Integer> range = IntStream.range(registerValue, registerValue + 3)
+                    .mapToObj(Integer::valueOf)
+                    .collect(Collectors.toSet());
+            return range.contains(cursorPos);
         }
     }
 

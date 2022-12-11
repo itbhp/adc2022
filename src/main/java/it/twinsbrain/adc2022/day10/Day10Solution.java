@@ -22,7 +22,6 @@ public class Day10Solution {
         part2(input); // PLPAFBCL
     }
 
-
     public static int part1(List<String> input) {
         var cyclesForSignalStrength = List.of(20, 60, 100, 140, 180, 220);
         Queue<Instruction> instructions = parse(input);
@@ -31,7 +30,6 @@ public class Day10Solution {
 
     public static int signalStrength(List<Integer> onCycles, Queue<Instruction> instructions) {
         int lastCycle = onCycles.get(onCycles.size() - 1);
-
         var signalStrengthObserver = new SignalStrengthObserver(onCycles);
         var cpu = new Cpu(signalStrengthObserver);
         startProcessingUpToNCyclesCount(instructions, lastCycle, cpu);
@@ -140,7 +138,6 @@ public class Day10Solution {
             } else {
                 System.out.print(".");
             }
-
         }
 
         private static boolean cursorInSpriteRange(int registerValue, int cursorPos) {

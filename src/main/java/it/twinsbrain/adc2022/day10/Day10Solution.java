@@ -34,13 +34,7 @@ public class Day10Solution {
 
         var signalStrengthObserver = new SignalStrengthObserver(onCycles);
         var cpu = new Cpu(signalStrengthObserver);
-        IntStream.range(1, lastCycle + 1).forEach(cycle -> {
-            if (cpu.canProcessNextInstruction()) {
-                cpu.process(cycle, instructions.poll());
-            } else {
-                cpu.process(cycle);
-            }
-        });
+        startProcessingUpToNCyclesCount(instructions, lastCycle, cpu);
         return signalStrengthObserver.strength();
     }
 
@@ -48,7 +42,11 @@ public class Day10Solution {
         Queue<Instruction> instructions = parse(input);
         var observer = new DisplayObserver();
         var cpu = new Cpu(observer);
-        IntStream.range(1, 241).forEach(cycle -> {
+        startProcessingUpToNCyclesCount(instructions, 241, cpu);
+    }
+
+    private static void startProcessingUpToNCyclesCount(Queue<Instruction> instructions, int lastCycle, Cpu cpu) {
+        IntStream.range(1, lastCycle + 1).forEach(cycle -> {
             if (cpu.canProcessNextInstruction()) {
                 cpu.process(cycle, instructions.poll());
             } else {

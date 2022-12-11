@@ -107,35 +107,33 @@ public class Day09Solution {
                 case Left steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
                     Point head = queue.get(0);
                     queue.set(0, new Point(head.x - 1, head.y));
-                    for (int i = 1; i < queue.size(); i++) {
-                        queue.set(i, updatedFollower(queue.get(i), queue.get(i - 1)));
-                    }
+                    updateFollowers();
                     addTrail(queue.getLast());
                 });
                 case Right steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
                     Point head = queue.get(0);
                     queue.set(0, new Point(head.x + 1, head.y));
-                    for (int i = 1; i < queue.size(); i++) {
-                        queue.set(i, updatedFollower(queue.get(i), queue.get(i - 1)));
-                    }
+                    updateFollowers();
                     addTrail(queue.getLast());
                 });
                 case Up steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
                     Point head = queue.get(0);
                     queue.set(0, new Point(head.x, head.y - 1));
-                    for (int i = 1; i < queue.size(); i++) {
-                        queue.set(i, updatedFollower(queue.get(i), queue.get(i - 1)));
-                    }
+                    updateFollowers();
                     addTrail(queue.getLast());
                 });
                 case Down steps -> IntStream.range(1, steps.amount + 1).forEach(step -> {
                     Point head = queue.get(0);
                     queue.set(0, new Point(head.x, head.y + 1));
-                    for (int i = 1; i < queue.size(); i++) {
-                        queue.set(i, updatedFollower(queue.get(i), queue.get(i - 1)));
-                    }
+                    updateFollowers();
                     addTrail(queue.getLast());
                 });
+            }
+        }
+
+        private void updateFollowers() {
+            for (int i = 1; i < queue.size(); i++) {
+                queue.set(i, updatedFollower(queue.get(i), queue.get(i - 1)));
             }
         }
 

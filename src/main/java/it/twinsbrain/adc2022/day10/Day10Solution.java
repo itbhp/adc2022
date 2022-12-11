@@ -46,9 +46,9 @@ public class Day10Solution {
     private static void startProcessingUpToNCyclesCount(Queue<Instruction> instructions, int lastCycle, Cpu cpu) {
         IntStream.range(1, lastCycle + 1).forEach(cycle -> {
             if (cpu.canProcessNextInstruction()) {
-                cpu.process(cycle, instructions.poll());
+                cpu.execute(cycle, instructions.poll());
             } else {
-                cpu.process(cycle);
+                cpu.execute(cycle);
             }
         });
     }
@@ -91,7 +91,7 @@ public class Day10Solution {
             return !pendingInstruction;
         }
 
-        public void process(int cycle, Instruction instruction) {
+        public void execute(int cycle, Instruction instruction) {
             currentInstruction = Optional.ofNullable(instruction);
             currentInstruction.ifPresent(i -> {
                 switch (i) {
@@ -105,7 +105,7 @@ public class Day10Solution {
             observer.onCycle(cycle, registerX);
         }
 
-        public void process(int cycle) {
+        public void execute(int cycle) {
             observer.onCycle(cycle, registerX);
             currentInstruction.ifPresent(current -> {
                 registerX = registerX + ((Add) current).value;

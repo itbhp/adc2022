@@ -124,15 +124,15 @@ public class Day10Solution {
 
 
     static class DisplayObserver implements CpuObserver {
-        private static final Integer SIZE = 40;
+        private static final Integer DISPLAY_MAX_COLUMNS = 40;
         public static final int SPRITE_SIZE = 3;
 
         @Override
         public void onCycle(int cycleCount, int registerValue) {
-            if ((cycleCount - 1) % SIZE == 0) {
+            if ((cycleCount - 1) % DISPLAY_MAX_COLUMNS == 0) {
                 System.out.print("\n");
             }
-            int cursorPos = cycleCount % SIZE;
+            int cursorPos = cycleCount % DISPLAY_MAX_COLUMNS;
             if (cursorInSpriteRange(registerValue, cursorPos)) {
                 System.out.print("#");
             } else {

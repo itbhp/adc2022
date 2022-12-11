@@ -134,9 +134,9 @@ public class Day10Solution {
             }
             int cursorPos = cycleCount % DISPLAY_MAX_COLUMNS;
             if (cursorInSpriteRange(registerValue, cursorPos)) {
-                System.out.print("#");
+                System.out.print("\u2588");
             } else {
-                System.out.print(".");
+                System.out.print(" ");
             }
         }
 

@@ -113,9 +113,7 @@ public class Day10Solution {
                         registerX = registerX + add.value;
                         pendingInstruction = false;
                     }
-                    case NoOp ignored -> {
-                        pendingInstruction = false;
-                    }
+                    case NoOp ignored -> pendingInstruction = false;
                 }
             });
             if (!pendingInstruction) {

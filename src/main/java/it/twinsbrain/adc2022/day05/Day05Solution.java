@@ -2,15 +2,14 @@ package it.twinsbrain.adc2022.day05;
 
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static it.twinsbrain.adc2022.FilesModule.read;
 import static it.twinsbrain.adc2022.FilesModule.resource;
+import static it.twinsbrain.adc2022.GroupingModule.chunked;
 
 public class Day05Solution {
 
@@ -100,9 +99,7 @@ public class Day05Solution {
         var cratesColumns = computeCratesColumns(input.get(0));
         var crates = newArrayList(cratesColumns);
         var regexp = Pattern.compile("\\[([A-Z])]\\s?");
-        BiConsumer<Integer, String> addElemToCrates = (Integer i, String id) -> {
-            crates.get(i).add(id);
-        };
+        BiConsumer<Integer, String> addElemToCrates = (Integer i, String id) -> crates.get(i).add(id);
         input.stream()
                 .takeWhile(row -> !row.matches("\\.*\\d+\\.*"))
                 .forEach(line -> addColumnItemsToCrates(regexp, addElemToCrates, line));
@@ -139,16 +136,5 @@ public class Day05Solution {
             linkedLists.add(new LinkedList<>());
         }
         return linkedLists;
-    }
-
-    public static Stream<String> chunked(String input, int chunkSize) {
-        AtomicInteger counter = new AtomicInteger();
-        return input
-                .chars()
-                .mapToObj(i -> (char) i)
-                .collect(Collectors.groupingBy(it -> counter.getAndIncrement() / chunkSize))
-                .values()
-                .stream()
-                .map(l -> l.stream().map(String::valueOf).collect(Collectors.joining()));
     }
 }

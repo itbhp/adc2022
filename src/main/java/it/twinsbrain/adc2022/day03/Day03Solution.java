@@ -1,16 +1,15 @@
 package it.twinsbrain.adc2022.day03;
 
 import java.net.URISyntaxException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static it.twinsbrain.adc2022.FilesModule.read;
 import static it.twinsbrain.adc2022.FilesModule.resource;
+import static it.twinsbrain.adc2022.GroupingModule.chunked;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
@@ -86,10 +85,5 @@ public class Day03Solution {
             }
         }
         throw new IllegalStateException("Unexpected group format " + chars);
-    }
-
-    public static <T> Collection<List<T>> chunked(List<T> inputList, int chunkSize) {
-        AtomicInteger counter = new AtomicInteger();
-        return inputList.stream().collect(Collectors.groupingBy(it -> counter.getAndIncrement() / chunkSize)).values();
     }
 }

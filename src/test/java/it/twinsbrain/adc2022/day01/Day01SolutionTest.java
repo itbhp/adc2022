@@ -4,8 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
 import static it.twinsbrain.adc2022.day01.Day01Solution.maxCaloriesByOneElf;
 import static it.twinsbrain.adc2022.day01.Day01Solution.maxCaloriesByThreeElves;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -89,6 +92,29 @@ class Day01SolutionTest {
                             "3",
                             "");
             assertThat(maxCaloriesByThreeElves(input), equalTo(7445));
+        }
+    }
+
+    @Nested
+    class AcceptanceTest {
+        private static final List<String> input;
+
+        static {
+            try {
+                input = read(resource("/day01/sample.txt"));
+            } catch (URISyntaxException e) {
+                throw new RuntimeException("input file not found!");
+            }
+        }
+
+        @Test
+        void part1_should_work() {
+            assertThat(maxCaloriesByOneElf(input), equalTo(24000));
+        }
+
+        @Test
+        void part2_should_work() {
+            assertThat(maxCaloriesByThreeElves(input), equalTo(45000));
         }
     }
 }

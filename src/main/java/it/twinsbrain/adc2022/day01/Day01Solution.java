@@ -1,22 +1,11 @@
 package it.twinsbrain.adc2022.day01;
 
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static it.twinsbrain.adc2022.FilesModule.read;
-import static it.twinsbrain.adc2022.FilesModule.resource;
-
 public class Day01Solution {
-
-    public static void main(String[] args) throws URISyntaxException {
-        var input = read(resource("/day01/input01.txt"));
-        System.out.printf("Max calories: %d", maxCaloriesByOneElf(input));
-        System.out.println();
-        System.out.printf("Max calories top 3 elves: %d", maxCaloriesByThreeElves(input));
-    }
 
     public static int maxCaloriesByThreeElves(List<String> input) {
         return topCalories(input, 3);

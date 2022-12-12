@@ -27,7 +27,7 @@ public class Day11Solution {
 
     public static Long part2(List<String> input) {
         var monkeys = parse(input);
-        long lcm = lcm(monkeys.stream().map(m -> m.worryDivisor).collect(Collectors.toList()));
+        long lcm = lcm(monkeys.stream().map(m -> m.throwDivisibleByTestValue).collect(Collectors.toList()));
         Function<Long, Long> reduceStressFunction = l -> l % lcm;
         return monkeysWorkingHard(10_000, monkeys, reduceStressFunction);
     }
@@ -52,22 +52,22 @@ public class Day11Solution {
     static class Monkey {
 
         private final Queue<Long> itemsWorryLevels = new LinkedList<>();
-        private final Function<Long, Long> updateFunction;
+        private final Function<Long, Long> updateWorryLevelFunction;
         public final int onThrowConditionPassed;
         public final int onThrowConditionFailed;
-        public final Long worryDivisor;
+        public final Long throwDivisibleByTestValue;
 
         private long numberOfInspections = 0;
 
         public Monkey(
-                Function<Long, Long> updateFunction,
-                long divisor,
+                Function<Long, Long> updateWorryLevelFunction,
+                long throwDivisibleByTestValue,
                 int onThrowConditionPassed,
                 int onThrowConditionFailed,
                 long... itemsWorryLevels
         ) {
-            this.worryDivisor = divisor;
-            this.updateFunction = updateFunction;
+            this.throwDivisibleByTestValue = throwDivisibleByTestValue;
+            this.updateWorryLevelFunction = updateWorryLevelFunction;
             this.onThrowConditionPassed = onThrowConditionPassed;
             this.onThrowConditionFailed = onThrowConditionFailed;
             for (long item : itemsWorryLevels) {
@@ -79,8 +79,8 @@ public class Day11Solution {
             while (!itemsWorryLevels.isEmpty()) {
                 numberOfInspections++;
                 var level = itemsWorryLevels.poll();
-                long newLevel = reduceStressFunction.apply(updateFunction.apply(level));
-                if (newLevel % worryDivisor == 0L) {
+                long newLevel = reduceStressFunction.apply(updateWorryLevelFunction.apply(level));
+                if (newLevel % throwDivisibleByTestValue == 0L) {
                     monkeys.get(onThrowConditionPassed).addItem(newLevel);
                 } else {
                     monkeys.get(onThrowConditionFailed).addItem(newLevel);
@@ -107,17 +107,11 @@ public class Day11Solution {
 
     private static Monkey toMonkey(List<String> strings) {
         long[] itemsWorryLevels = itemsWorryLevels(strings);
-        var updateFunction = toUpdateFunction(strings.get(2));
-        var throwDivisor = toThrowDivisor(strings.get(3));
+        var updateFunction = toUpdateWorryLevelFunction(strings.get(2));
+        var throwDivisor = toThrowDivisibleByTestValue(strings.get(3));
         var onPassed = Integer.parseInt(strings.get(4).replaceAll("\s{4}If true: throw to monkey ", "").trim());
         var onFailed = Integer.parseInt(strings.get(5).replaceAll("\s{4}If false: throw to monkey ", "").trim());
-
-        return new Monkey(
-                updateFunction,
-                throwDivisor,
-                onPassed,
-                onFailed,
-                itemsWorryLevels);
+        return new Monkey(updateFunction, throwDivisor, onPassed, onFailed, itemsWorryLevels);
     }
 
     private static long[] itemsWorryLevels(List<String> strings) {
@@ -129,11 +123,11 @@ public class Day11Solution {
         return result;
     }
 
-    private static long toThrowDivisor(String s) {
+    private static long toThrowDivisibleByTestValue(String s) {
         return Long.parseLong(s.replaceAll("\s{2}Test: divisible by ", ""));
     }
 
-    private static Function<Long, Long> toUpdateFunction(String s) {
+    private static Function<Long, Long> toUpdateWorryLevelFunction(String s) {
         String update = s.replaceAll("\s{2}Operation: new = ", "");
         Matcher updateMatcher = updatePattern.matcher(update);
         updateMatcher.find();

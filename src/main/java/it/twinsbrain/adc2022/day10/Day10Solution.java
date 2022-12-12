@@ -102,14 +102,21 @@ public class Day10Solution {
             if (!pendingInstruction) {
                 currentInstruction = Optional.empty();
             }
-            observer.onCycle(cycle, registerX);
+            observer.onExecute(cycle, registerX);
         }
 
         public void execute(int cycle) {
-            observer.onCycle(cycle, registerX);
+            observer.onExecute(cycle, registerX);
             currentInstruction.ifPresent(current -> {
-                registerX = registerX + ((Add) current).value;
-                pendingInstruction = false;
+                switch (current) {
+                    case Add add -> {
+                        registerX = registerX + add.value;
+                        pendingInstruction = false;
+                    }
+                    case NoOp ignored -> {
+                        pendingInstruction = false;
+                    }
+                }
             });
             if (!pendingInstruction) {
                 currentInstruction = Optional.empty();
@@ -117,9 +124,8 @@ public class Day10Solution {
         }
     }
 
-    @FunctionalInterface
     interface CpuObserver {
-        void onCycle(int cycleCount, int registerValue);
+        void onExecute(int cycleCount, int registerValue);
     }
 
 
@@ -128,7 +134,7 @@ public class Day10Solution {
         public static final int SPRITE_SIZE = 3;
 
         @Override
-        public void onCycle(int cycleCount, int registerValue) {
+        public void onExecute(int cycleCount, int registerValue) {
             if ((cycleCount - 1) % DISPLAY_MAX_COLUMNS == 0) {
                 System.out.print("\n");
             }
@@ -154,7 +160,7 @@ public class Day10Solution {
         }
 
         @Override
-        public void onCycle(int cycleCount, int registerValue) {
+        public void onExecute(int cycleCount, int registerValue) {
             if (cyclesToObserve.contains(cycleCount)) {
                 strength.addAndGet(cycleCount * registerValue);
             }

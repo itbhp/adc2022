@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static it.twinsbrain.adc2022.day11.Day11Solution.parse;
+import static it.twinsbrain.adc2022.day11.Day11Solution.part1;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
@@ -77,5 +78,10 @@ class Day11SolutionTest {
         assertThat(monkey3.updatedItem(10), is(13));
         assertThat(monkey3.onThrowConditionPassed, is(0));
         assertThat(monkey3.onThrowConditionFailed, is(1));
+    }
+
+    @Test
+    void part1_should_work() {
+        assertThat(part1(input), is(10605));
     }
 }

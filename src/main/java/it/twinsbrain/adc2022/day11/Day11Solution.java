@@ -1,24 +1,38 @@
 package it.twinsbrain.adc2022.day11;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static it.twinsbrain.adc2022.GroupingModule.chunked;
 
 public class Day11Solution {
 
+    public static int part1(List<String> input) {
+        var monkeys = parse(input);
+        IntStream.range(0, 20).forEach(ignored ->
+                monkeys.forEach(monkey -> monkey.performInspectionsAndUpdate(monkeys))
+        );
+        return monkeys.stream()
+                .map(Monkey::numberOfInspections)
+                .sorted(Comparator.reverseOrder())
+                .limit(2)
+                .mapToInt(Integer::intValue)
+                .reduce((a, b) -> a * b).orElse(0);
+    }
+
     static class Monkey {
-        private final LinkedList<Integer> items = new LinkedList<>();
+        private final Queue<Integer> worryLevelsItems = new LinkedList<>();
         private final Predicate<Integer> throwCondition;
         private final Function<Integer, Integer> updateFunction;
         public final int onThrowConditionPassed;
         public final int onThrowConditionFailed;
+
+        private int numberOfInspections = 0;
 
         public Monkey(
                 Predicate<Integer> throwCondition,
@@ -32,12 +46,12 @@ public class Day11Solution {
             this.onThrowConditionPassed = onThrowConditionPassed;
             this.onThrowConditionFailed = onThrowConditionFailed;
             for (int item : items) {
-                this.items.add(item);
+                this.worryLevelsItems.add(item);
             }
         }
 
         public List<Integer> currentItems() {
-            return items;
+            return new LinkedList<>(worryLevelsItems);
         }
 
         public boolean shouldThrow(Integer item) {
@@ -46,6 +60,27 @@ public class Day11Solution {
 
         public int updatedItem(Integer item) {
             return updateFunction.apply(item);
+        }
+
+        public void performInspectionsAndUpdate(List<Monkey> monkeys) {
+            while (!worryLevelsItems.isEmpty()) {
+                numberOfInspections++;
+                var level = worryLevelsItems.poll();
+                int newLevel = updateFunction.apply(level) / 3;
+                if (throwCondition.test(newLevel)) {
+                    monkeys.get(onThrowConditionPassed).addItem(newLevel);
+                } else {
+                    monkeys.get(onThrowConditionFailed).addItem(newLevel);
+                }
+            }
+        }
+
+        public int numberOfInspections() {
+            return numberOfInspections;
+        }
+
+        private void addItem(int newLevel) {
+            worryLevelsItems.add(newLevel);
         }
     }
 

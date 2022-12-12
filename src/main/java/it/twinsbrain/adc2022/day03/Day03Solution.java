@@ -1,26 +1,16 @@
 package it.twinsbrain.adc2022.day03;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-import static it.twinsbrain.adc2022.FilesModule.read;
-import static it.twinsbrain.adc2022.FilesModule.resource;
 import static it.twinsbrain.adc2022.GroupingModule.chunked;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 public class Day03Solution {
-
-    public static void main(String[] args) throws URISyntaxException {
-        var input = read(resource("/day03/input.txt"));
-        System.out.printf("Priorities sum part 1: %d", part1PrioritiesSum(input));
-        System.out.println();
-        System.out.printf("Priorities sum part 2: %d", part2PrioritiesSum(input));
-    }
 
     private final static Map<String, Integer> weights;
 

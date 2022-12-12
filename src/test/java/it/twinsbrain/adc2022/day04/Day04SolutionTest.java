@@ -3,11 +3,9 @@ package it.twinsbrain.adc2022.day04;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
-import static it.twinsbrain.adc2022.FilesModule.read;
-import static it.twinsbrain.adc2022.FilesModule.resource;
+import static it.twinsbrain.adc2022.FixtureModule.readSample;
 import static it.twinsbrain.adc2022.day04.Day04Solution.howManyRangesOverlaps;
 import static it.twinsbrain.adc2022.day04.Day04Solution.howManyRangesOverlapsFully;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,24 +28,16 @@ public class Day04SolutionTest {
     @Nested
     class AcceptanceTest {
 
-        private static final List<String> input;
-
-        static {
-            try {
-                input = read(resource("/day04/input.txt"));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException("input file not found!");
-            }
-        }
+        private static final List<String> input = readSample("day04");
 
         @Test
         void part1() {
-            assertThat(howManyRangesOverlapsFully(input), equalTo(657L));
+            assertThat(howManyRangesOverlapsFully(input), equalTo(2L));
         }
 
         @Test
         void part2() {
-            assertThat(howManyRangesOverlaps(input), equalTo(938L));
+            assertThat(howManyRangesOverlaps(input), equalTo(4L));
         }
     }
 }

@@ -1,12 +1,15 @@
 package it.twinsbrain.adc2022.day02;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 
+import static it.twinsbrain.adc2022.FixtureModule.readSample;
 import static it.twinsbrain.adc2022.day02.Day02Solution.score;
+import static it.twinsbrain.adc2022.day02.Day02Solution.scoreWithExpectedOutcome;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -47,5 +50,20 @@ class Day02SolutionTest {
     @Test
     void multipleRounds() {
         assertThat(score(List.of("C X", "B X")), equalTo(8));
+    }
+
+    @Nested
+    class AcceptanceTest {
+        private static final List<String> input = readSample("day02");
+
+        @Test
+        void part1_should_work() {
+            assertThat(score(input), equalTo(15));
+        }
+
+        @Test
+        void part2_should_work() {
+            assertThat(scoreWithExpectedOutcome(input), equalTo(12));
+        }
     }
 }

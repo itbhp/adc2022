@@ -9,7 +9,7 @@ import static it.twinsbrain.adc2022.FilesModule.resource;
 public class Day04Solution {
 
     public static void main(String[] args) throws URISyntaxException {
-        var input = read(resource("/day04/input.txt"));
+        var input = read(resource("/day04/sample.txt"));
         System.out.printf("Part 1: %d", howManyRangesOverlapsFully(input));
         System.out.println();
         System.out.printf("Part 2: %d", howManyRangesOverlaps(input));

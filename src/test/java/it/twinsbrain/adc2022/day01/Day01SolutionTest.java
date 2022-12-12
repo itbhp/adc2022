@@ -4,11 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
-import static it.twinsbrain.adc2022.FilesModule.read;
-import static it.twinsbrain.adc2022.FilesModule.resource;
+import static it.twinsbrain.adc2022.FixtureModule.readSample;
 import static it.twinsbrain.adc2022.day01.Day01Solution.maxCaloriesByOneElf;
 import static it.twinsbrain.adc2022.day01.Day01Solution.maxCaloriesByThreeElves;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -97,15 +95,7 @@ class Day01SolutionTest {
 
     @Nested
     class AcceptanceTest {
-        private static final List<String> input;
-
-        static {
-            try {
-                input = read(resource("/day01/sample.txt"));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException("input file not found!");
-            }
-        }
+        private static final List<String> input = readSample("day01");
 
         @Test
         void part1_should_work() {

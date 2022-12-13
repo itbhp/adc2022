@@ -105,8 +105,8 @@ public class Day12Solution {
                     graph.addNode(node);
                 }
             }
-            calculateShortestPathFromSource(graph, startNode);
-            return endNode.distance;
+            calculateShortestPathFromSource(Objects.requireNonNull(startNode));
+            return Objects.requireNonNull(endNode).distance;
         }
 
         private void addNeighbours(Node node, Node[][] grid, int i, int j) {
@@ -143,7 +143,7 @@ public class Day12Solution {
         }
     }
 
-    public static Graph calculateShortestPathFromSource(Graph graph, Node source) {
+    public static void calculateShortestPathFromSource(Node source) {
         source.setDistance(0);
 
         Set<Node> settledNodes = new HashSet<>();
@@ -164,7 +164,6 @@ public class Day12Solution {
             }
             settledNodes.add(currentNode);
         }
-        return graph;
     }
 
     private static Node getLowestDistanceNode(Set<Node> unsettledNodes) {
@@ -196,7 +195,7 @@ public class Day12Solution {
 
     static class Graph {
 
-        private Set<Node> nodes = new HashSet<>();
+        private final Set<Node> nodes = new HashSet<>();
 
         public void addNode(Node nodeA) {
             nodes.add(nodeA);
@@ -244,8 +243,6 @@ public class Day12Solution {
         public void addDestination(Node destination, int distance) {
             adjacentNodes.put(destination, distance);
         }
-
-        // getters and setters
     }
 
     public static Grid parse(List<String> input) {

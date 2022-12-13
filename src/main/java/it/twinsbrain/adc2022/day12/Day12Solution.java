@@ -1,15 +1,13 @@
 package it.twinsbrain.adc2022.day12;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Day12Solution {
 
     public static int part1(List<String> input) {
-//        Grid grid = parse(input);
-        throw new UnsupportedOperationException();
+        Grid grid = parse(input);
+        return grid.howManyStepsToGetSignal();
     }
 
     static class Grid {
@@ -79,6 +77,175 @@ public class Day12Solution {
                     ", endY=" + endY +
                     '}';
         }
+
+        public int howManyStepsToGetSignal() {
+            var graph = new Graph();
+            var nodeGrid = new Node[grid.length][];
+            Node startNode = null;
+            Node endNode = null;
+            for (int i = 0; i < nodeGrid.length; i++) {
+                var columns = grid[i].length;
+                var row = new Node[columns];
+                for (int j = 0; j < columns; j++) {
+                    Node node = new Node(grid[i][j], i, j);
+                    if (i == startX && j == startY) {
+                        startNode = node;
+                    }
+                    if (i == endX && j == endY) {
+                        endNode = node;
+                    }
+                    row[j] = node;
+                }
+                nodeGrid[i] = row;
+            }
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[i].length; j++) {
+                    Node node = nodeGrid[i][j];
+                    addNeighbours(node, nodeGrid, i, j);
+                    graph.addNode(node);
+                }
+            }
+            calculateShortestPathFromSource(graph, startNode);
+            return endNode.distance;
+        }
+
+        private void addNeighbours(Node node, Node[][] grid, int i, int j) {
+            var rows = grid.length;
+            var columns = grid[0].length;
+            if (i - 1 > 0 && i - 1 < rows) {
+                Node neighbour = grid[i - 1][j];
+                if (comesAfter(node.id, neighbour)) {
+                    node.addDestination(neighbour, 1);
+                }
+            }
+            if (i + 1 > 0 && i + 1 < rows) {
+                Node neighbour = grid[i + 1][j];
+                if (comesAfter(node.id, neighbour)) {
+                    node.addDestination(neighbour, 1);
+                }
+            }
+            if (j - 1 > 0 && j - 1 < columns) {
+                Node neighbour = grid[i][j - 1];
+                if (comesAfter(node.id, neighbour)) {
+                    node.addDestination(neighbour, 1);
+                }
+            }
+            if (j + 1 > 0 && j + 1 < columns) {
+                Node neighbour = grid[i][j + 1];
+                if (comesAfter(node.id, neighbour)) {
+                    node.addDestination(neighbour, 1);
+                }
+            }
+        }
+
+        private boolean comesAfter(char id, Node c) {
+            return ((int) c.id) - ((int) id) == 1;
+        }
+    }
+
+    public static Graph calculateShortestPathFromSource(Graph graph, Node source) {
+        source.setDistance(0);
+
+        Set<Node> settledNodes = new HashSet<>();
+        Set<Node> unsettledNodes = new HashSet<>();
+
+        unsettledNodes.add(source);
+
+        while (unsettledNodes.size() != 0) {
+            Node currentNode = getLowestDistanceNode(unsettledNodes);
+            unsettledNodes.remove(currentNode);
+            for (Map.Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
+                Node adjacentNode = adjacencyPair.getKey();
+                Integer edgeWeight = adjacencyPair.getValue();
+                if (!settledNodes.contains(adjacentNode)) {
+                    calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
+                    unsettledNodes.add(adjacentNode);
+                }
+            }
+            settledNodes.add(currentNode);
+        }
+        return graph;
+    }
+
+    private static Node getLowestDistanceNode(Set<Node> unsettledNodes) {
+        Node lowestDistanceNode = null;
+        int lowestDistance = Integer.MAX_VALUE;
+        for (Node node : unsettledNodes) {
+            int nodeDistance = node.getDistance();
+            if (nodeDistance < lowestDistance) {
+                lowestDistance = nodeDistance;
+                lowestDistanceNode = node;
+            }
+        }
+        return lowestDistanceNode;
+    }
+
+    private static void calculateMinimumDistance(
+            Node evaluationNode,
+            Integer edgeWeigh,
+            Node sourceNode
+    ) {
+        Integer sourceDistance = sourceNode.getDistance();
+        if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
+            evaluationNode.setDistance(sourceDistance + edgeWeigh);
+            LinkedList<Node> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
+            shortestPath.add(sourceNode);
+            evaluationNode.setShortestPath(shortestPath);
+        }
+    }
+
+    static class Graph {
+
+        private Set<Node> nodes = new HashSet<>();
+
+        public void addNode(Node nodeA) {
+            nodes.add(nodeA);
+        }
+    }
+
+    static class Node {
+
+        private final char id;
+        private final int x;
+        private final int y;
+
+        private List<Node> shortestPath = new LinkedList<>();
+
+        private Integer distance = Integer.MAX_VALUE;
+
+        Map<Node, Integer> adjacentNodes = new HashMap<>();
+
+        public Node(char id, int x, int y) {
+            this.id = id;
+            this.x = x;
+            this.y = y;
+        }
+
+        public Integer getDistance() {
+            return distance;
+        }
+
+        public void setDistance(Integer distance) {
+            this.distance = distance;
+        }
+
+        public List<Node> getShortestPath() {
+            return shortestPath;
+        }
+
+        public void setShortestPath(List<Node> shortestPath) {
+            this.shortestPath = shortestPath;
+        }
+
+        public Map<Node, Integer> getAdjacentNodes() {
+            return adjacentNodes;
+        }
+
+        public void addDestination(Node destination, int distance) {
+            adjacentNodes.put(destination, distance);
+        }
+
+        // getters and setters
     }
 
     public static Grid parse(List<String> input) {

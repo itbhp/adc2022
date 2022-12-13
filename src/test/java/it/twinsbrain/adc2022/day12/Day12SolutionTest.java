@@ -1,7 +1,6 @@
 package it.twinsbrain.adc2022.day12;
 
 import it.twinsbrain.adc2022.FixtureModule;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +32,6 @@ class Day12SolutionTest {
         private final static List<String> input = FixtureModule.readSample("day12");
 
         @Test
-        @Disabled
         void part1_should_work() {
             assertThat(Day12Solution.part1(input), equalTo(31));
         }

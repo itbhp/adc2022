@@ -87,7 +87,7 @@ public class Day12Solution {
                 var columns = grid[i].length;
                 var row = new Node[columns];
                 for (int j = 0; j < columns; j++) {
-                    Node node = new Node(grid[i][j], i, j);
+                    Node node = makeNode(i, j);
                     if (i == startX && j == startY) {
                         startNode = node;
                     }
@@ -109,37 +109,47 @@ public class Day12Solution {
             return Objects.requireNonNull(endNode).distance;
         }
 
+        private Node makeNode(int i, int j) {
+            char elevation = grid[i][j];
+            return switch (elevation) {
+                case 'S' -> new Node('a', i, j);
+                case 'E' -> new Node('z', i, j);
+                default -> new Node(elevation, i, j);
+            };
+        }
+
         private void addNeighbours(Node node, Node[][] grid, int i, int j) {
             var rows = grid.length;
             var columns = grid[0].length;
-            if (i - 1 > 0 && i - 1 < rows) {
+            if (i - 1 >= 0 && i - 1 < rows) {
                 Node neighbour = grid[i - 1][j];
-                if (comesAfter(node.id, neighbour)) {
+                if (comesAfter(node.elevation, neighbour)) {
                     node.addDestination(neighbour, 1);
                 }
             }
-            if (i + 1 > 0 && i + 1 < rows) {
+            if (i + 1 >= 0 && i + 1 < rows) {
                 Node neighbour = grid[i + 1][j];
-                if (comesAfter(node.id, neighbour)) {
+                if (comesAfter(node.elevation, neighbour)) {
                     node.addDestination(neighbour, 1);
                 }
             }
-            if (j - 1 > 0 && j - 1 < columns) {
+            if (j - 1 >= 0 && j - 1 < columns) {
                 Node neighbour = grid[i][j - 1];
-                if (comesAfter(node.id, neighbour)) {
+                if (comesAfter(node.elevation, neighbour)) {
                     node.addDestination(neighbour, 1);
                 }
             }
-            if (j + 1 > 0 && j + 1 < columns) {
+            if (j + 1 >= 0 && j + 1 < columns) {
                 Node neighbour = grid[i][j + 1];
-                if (comesAfter(node.id, neighbour)) {
+                if (comesAfter(node.elevation, neighbour)) {
                     node.addDestination(neighbour, 1);
                 }
             }
         }
 
         private boolean comesAfter(char id, Node c) {
-            return ((int) c.id) - ((int) id) == 1;
+            int distance = ((int) c.elevation) - ((int) id);
+            return distance == 1 || distance == 0;
         }
     }
 
@@ -204,7 +214,7 @@ public class Day12Solution {
 
     static class Node {
 
-        private final char id;
+        private final char elevation;
         private final int x;
         private final int y;
 
@@ -214,10 +224,15 @@ public class Day12Solution {
 
         Map<Node, Integer> adjacentNodes = new HashMap<>();
 
-        public Node(char id, int x, int y) {
-            this.id = id;
+        public Node(char elevation, int x, int y) {
+            this.elevation = elevation;
             this.x = x;
             this.y = y;
+        }
+
+        @Override
+        public String toString() {
+            return "" + elevation;
         }
 
         public Integer getDistance() {

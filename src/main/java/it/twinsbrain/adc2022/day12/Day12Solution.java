@@ -38,8 +38,8 @@ public class Day12Solution {
                     graph.addNode(node);
                 }
             }
-            calculateShortestPathFromSource(graph.startNode());
-            return graph.endNode().distance;
+
+            return calculateShortestPathFromSource(graph.startNode());
         }
 
         private Node makeNode(char elevation, int i, int j) {
@@ -56,52 +56,39 @@ public class Day12Solution {
 
             IntStream.rangeClosed(Math.max(i-1, 0), Math.min(i+1, rows-1))
                 .filter(it -> it != i)
-                .forEach(x -> node.addAdjacentNode(grid[x][j], 1));
+                .forEach(x -> node.addAdjacentNode(grid[x][j]));
 
             IntStream.rangeClosed(Math.max(j-1, 0), Math.min(j+1, columns-1))
                 .filter(it -> it != j)
-                .forEach(y -> node.addAdjacentNode(grid[i][y], 1));
+                .forEach(y -> node.addAdjacentNode(grid[i][y]));
         }
 
     }
 
-    public static void calculateShortestPathFromSource(Node source) {
-        source.setDistance(0);
+    public static int calculateShortestPathFromSource(Node source) {
+        Set<Node> visited = new HashSet<>();
+        ArrayDeque<Node> queue = new ArrayDeque<>();
+        ArrayDeque<Integer> steps = new ArrayDeque<>();
 
-        Set<Node> settledNodes = new HashSet<>();
-        Set<Node> unsettledNodes = new HashSet<>();
+        queue.add(source);
+        steps.add(0);
 
-        unsettledNodes.add(source);
+        while (!queue.isEmpty()){
+            Node current = queue.removeFirst();
+            visited.add(current);
 
-        while (unsettledNodes.size() != 0) {
-            Node currentNode = getLowestDistanceNode(unsettledNodes);
-            unsettledNodes.remove(currentNode);
-            for (Map.Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = adjacencyPair.getKey();
-                Integer edgeWeight = adjacencyPair.getValue();
-                if (!settledNodes.contains(adjacentNode)) {
-                    Integer sourceDistance = currentNode.getDistance();
-                    if (sourceDistance + edgeWeight < adjacentNode.getDistance()) {
-                        adjacentNode.setDistance(sourceDistance + edgeWeight);
-                    }
-                    unsettledNodes.add(adjacentNode);
+            int currentSteps = steps.removeFirst();
+            if (current.isEnd) return currentSteps;
+
+            current.getAdjacentNodes().forEach(adj -> {
+                if (!visited.contains(adj)){
+                    queue.addLast(adj);
+                    steps.addLast(currentSteps + 1);
                 }
-            }
-            settledNodes.add(currentNode);
+            });
         }
-    }
 
-    private static Node getLowestDistanceNode(Set<Node> unsettledNodes) {
-        Node lowestDistanceNode = null;
-        int lowestDistance = Integer.MAX_VALUE;
-        for (Node node : unsettledNodes) {
-            int nodeDistance = node.getDistance();
-            if (nodeDistance < lowestDistance) {
-                lowestDistance = nodeDistance;
-                lowestDistanceNode = node;
-            }
-        }
-        return lowestDistanceNode;
+        return -1;
     }
 
     static class Graph {
@@ -129,9 +116,7 @@ public class Day12Solution {
         private final boolean isStart;
         private final boolean isEnd;
 
-        private Integer distance = Integer.MAX_VALUE;
-
-        Map<Node, Integer> adjacentNodes = new HashMap<>();
+        private final List<Node> adjacentNodes = new ArrayList<>();
 
         public Node(char elevation, int x, int y, boolean isStart, boolean isEnd) {
             this.elevation = elevation;
@@ -158,21 +143,13 @@ public class Day12Solution {
             return "" + elevation;
         }
 
-        public Integer getDistance() {
-            return distance;
-        }
-
-        public void setDistance(Integer distance) {
-            this.distance = distance;
-        }
-
-        public Map<Node, Integer> getAdjacentNodes() {
+        public List<Node> getAdjacentNodes() {
             return adjacentNodes;
         }
 
-        public void addAdjacentNode(Node destination, int distance) {
+        public void addAdjacentNode(Node destination) {
             if (sameHeightOrOneShorter(destination)) {
-                adjacentNodes.put(destination, distance);
+                adjacentNodes.add(destination);
             }
         }
 

@@ -156,7 +156,7 @@ public class Day12Solution {
 
         private boolean isGoodCandidate(Node target) {
             int gap = target.elevation - elevation;
-            return Math.abs(gap) <= 1;
+            return gap <= 1;
         }
     }
 

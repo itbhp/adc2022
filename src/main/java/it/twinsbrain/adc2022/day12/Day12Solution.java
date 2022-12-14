@@ -1,11 +1,11 @@
 package it.twinsbrain.adc2022.day12;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
+
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.IntStream;
-
-import static it.twinsbrain.adc2022.FilesModule.read;
-import static it.twinsbrain.adc2022.FilesModule.resource;
 
 public class Day12Solution {
 

@@ -1,7 +1,6 @@
 package it.twinsbrain.adc2022.day12;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Day12Solution {
@@ -54,13 +53,13 @@ public class Day12Solution {
             var rows = grid.length;
             var columns = grid[0].length;
 
-            IntStream.rangeClosed(Math.max(i-1, 0), Math.min(i+1, rows-1))
-                .filter(it -> it != i)
-                .forEach(x -> node.addAdjacentNode(grid[x][j]));
+            IntStream.rangeClosed(Math.max(i - 1, 0), Math.min(i + 1, rows - 1))
+                    .filter(it -> it != i)
+                    .forEach(x -> node.addAdjacentNode(grid[x][j]));
 
-            IntStream.rangeClosed(Math.max(j-1, 0), Math.min(j+1, columns-1))
-                .filter(it -> it != j)
-                .forEach(y -> node.addAdjacentNode(grid[i][y]));
+            IntStream.rangeClosed(Math.max(j - 1, 0), Math.min(j + 1, columns - 1))
+                    .filter(it -> it != j)
+                    .forEach(y -> node.addAdjacentNode(grid[i][y]));
         }
 
     }
@@ -73,7 +72,7 @@ public class Day12Solution {
         queue.add(source);
         steps.add(0);
 
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             Node current = queue.removeFirst();
             visited.add(current);
 
@@ -81,7 +80,7 @@ public class Day12Solution {
             if (current.isEnd) return currentSteps;
 
             current.getAdjacentNodes().forEach(adj -> {
-                if (!visited.contains(adj)){
+                if (!visited.contains(adj)) {
                     queue.addLast(adj);
                     steps.addLast(currentSteps + 1);
                 }
@@ -100,20 +99,26 @@ public class Day12Solution {
         }
 
         public Node startNode() {
-            return nodes.stream().filter(it -> it.isStart).findFirst().get();
+            return nodes.stream().filter(it -> it.isStart).findFirst().orElseThrow();
         }
 
         public Node endNode() {
-            return nodes.stream().filter(it -> it.isEnd).findFirst().get();
+            return nodes.stream().filter(it -> it.isEnd).findFirst().orElseThrow();
         }
     }
 
     static class Node {
 
         private final char elevation;
+
+        @SuppressWarnings("unused")
         private final int x;
+
+        @SuppressWarnings("unused")
         private final int y;
+
         private final boolean isStart;
+
         private final boolean isEnd;
 
         private final List<Node> adjacentNodes = new ArrayList<>();

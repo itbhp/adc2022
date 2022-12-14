@@ -1,19 +1,9 @@
 package it.twinsbrain.adc2022.day12;
 
-import static it.twinsbrain.adc2022.FilesModule.read;
-import static it.twinsbrain.adc2022.FilesModule.resource;
-
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.IntStream;
 
 public class Day12Solution {
-
-    public static void main(String[] args) throws URISyntaxException {
-        var input = read(resource("/day12/input.txt"));
-        System.out.printf("Part 1: %s", part1(input));
-        System.out.println();
-    }
 
     public static int part1(List<String> input) {
         Grid grid = parse(input);

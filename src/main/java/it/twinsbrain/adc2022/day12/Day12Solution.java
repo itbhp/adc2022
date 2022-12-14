@@ -37,7 +37,6 @@ public class Day12Solution {
                     graph.addNode(node);
                 }
             }
-
             return calculateShortestPathFromSource(graph.startNode());
         }
 
@@ -61,7 +60,6 @@ public class Day12Solution {
                     .filter(it -> it != j)
                     .forEach(y -> node.addAdjacentNode(grid[i][y]));
         }
-
     }
 
     public static int calculateShortestPathFromSource(Node source) {
@@ -86,7 +84,6 @@ public class Day12Solution {
                 }
             });
         }
-
         return -1;
     }
 
@@ -100,10 +97,6 @@ public class Day12Solution {
 
         public Node startNode() {
             return nodes.stream().filter(it -> it.isStart).findFirst().orElseThrow();
-        }
-
-        public Node endNode() {
-            return nodes.stream().filter(it -> it.isEnd).findFirst().orElseThrow();
         }
     }
 

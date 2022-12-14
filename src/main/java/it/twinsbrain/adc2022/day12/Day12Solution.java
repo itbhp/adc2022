@@ -1,9 +1,19 @@
 package it.twinsbrain.adc2022.day12;
 
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.IntStream;
 
+import static it.twinsbrain.adc2022.FilesModule.read;
+import static it.twinsbrain.adc2022.FilesModule.resource;
+
 public class Day12Solution {
+
+    public static void main(String[] args) throws URISyntaxException {
+        var input = read(resource("/day12/input.txt"));
+        System.out.printf("Part 1: %s", part1(input));
+        System.out.println();
+    }
 
     public static int part1(List<String> input) {
         Grid grid = parse(input);
@@ -64,27 +74,24 @@ public class Day12Solution {
 
     public static int calculateShortestPathFromSource(Node source) {
         Set<Node> visited = new HashSet<>();
-        ArrayDeque<Node> queue = new ArrayDeque<>();
-        ArrayDeque<Integer> steps = new ArrayDeque<>();
+        PriorityQueue<WeightedNode> queue = new PriorityQueue<>();
 
-        queue.add(source);
-        steps.add(0);
+        queue.add(new WeightedNode(source, 0));
 
         while (!queue.isEmpty()) {
-            Node current = queue.removeFirst();
-            visited.add(current);
+            WeightedNode current = queue.poll();
 
-            int currentSteps = steps.removeFirst();
-            if (current.isEnd) return currentSteps;
+            if (current.point.isEnd) return current.totalDistance;
 
-            current.getAdjacentNodes().forEach(adj -> {
-                if (!visited.contains(adj)) {
-                    queue.addLast(adj);
-                    steps.addLast(currentSteps + 1);
-                }
-            });
+            if (!visited.contains(current.point)){
+                visited.add(current.point);
+                current.point.getAdjacentNodes().forEach(adj -> {
+                    queue.offer(new WeightedNode(adj, current.totalDistance + 1));
+                });
+            }
         }
-        return -1;
+
+        throw new IllegalStateException("End not reached");
     }
 
     static class Graph {
@@ -97,6 +104,24 @@ public class Day12Solution {
 
         public Node startNode() {
             return nodes.stream().filter(it -> it.isStart).findFirst().orElseThrow();
+        }
+    }
+
+
+
+    static class WeightedNode implements Comparable<WeightedNode> {
+
+        private Node point;
+        private Integer totalDistance;
+
+        WeightedNode(Node point, Integer totalDistance){
+            this.point = point;
+            this.totalDistance = totalDistance;
+        }
+
+        @Override
+        public int compareTo(WeightedNode o) {
+            return this.totalDistance - o.totalDistance;
         }
     }
 

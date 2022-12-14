@@ -19,5 +19,10 @@ class Day12SolutionTest {
         void part1_should_work() {
             assertThat(Day12Solution.part1(input), equalTo(31));
         }
+
+        @Test
+        void part2_should_work() {
+            assertThat(Day12Solution.part2(input), equalTo(29));
+        }
     }
 }

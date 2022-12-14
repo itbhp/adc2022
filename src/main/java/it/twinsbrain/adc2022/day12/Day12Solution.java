@@ -36,12 +36,6 @@ public class Day12Solution {
 
 
         public int howManyStepsToGetSignal() {
-            for (int i = 0; i < grid.length; i++) {
-                for (int j = 0; j < grid[i].length; j++) {
-                    Node node = grid[i][j];
-                    addNeighbours(node, i, j);
-                }
-            }
             return calculateShortestPathFromSource(start).orElse(0);
         }
 
@@ -81,6 +75,15 @@ public class Day12Solution {
                     .map(Optional::get)
                     .mapToInt(Integer::intValue)
                     .min().orElse(0);
+        }
+
+        public void fillNeighbours() {
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[i].length; j++) {
+                    Node node = grid[i][j];
+                    addNeighbours(node, i, j);
+                }
+            }
         }
     }
 
@@ -182,6 +185,7 @@ public class Day12Solution {
             String line = input.get(j);
             grid.acceptRow(j, line);
         }
+        grid.fillNeighbours();
         return grid;
     }
 }

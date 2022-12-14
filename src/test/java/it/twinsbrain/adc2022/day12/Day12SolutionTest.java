@@ -1,16 +1,14 @@
 package it.twinsbrain.adc2022.day12;
 
 import it.twinsbrain.adc2022.FixtureModule;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
 class Day12SolutionTest {
-
 
     @Nested
     class AcceptanceTest {

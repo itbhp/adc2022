@@ -12,6 +12,8 @@ public class Day12Solution {
 
     static class Grid {
         public final Node[][] grid;
+        public Node start;
+        public Node end;
 
         public Grid(int numberOfRows) {
             grid = new Node[numberOfRows][];
@@ -29,21 +31,25 @@ public class Day12Solution {
 
 
         public int howManyStepsToGetSignal() {
-            var graph = new Graph();
             for (int i = 0; i < grid.length; i++) {
                 for (int j = 0; j < grid[i].length; j++) {
                     Node node = grid[i][j];
                     addNeighbours(node, i, j);
-                    graph.addNode(node);
                 }
             }
-            return calculateShortestPathFromSource(graph.startNode());
+            return calculateShortestPathFromSource(start);
         }
 
         private Node makeNode(char elevation, int i, int j) {
             return switch (elevation) {
-                case 'S' -> Node.start(i, j);
-                case 'E' -> Node.end(i, j);
+                case 'S' -> {
+                    start = Node.start(i, j);
+                    yield start;
+                }
+                case 'E' -> {
+                    end = Node.end(i, j);
+                    yield end;
+                }
                 default -> Node.make(elevation, i, j);
             };
         }
@@ -84,19 +90,6 @@ public class Day12Solution {
         throw new IllegalStateException("End not reached");
     }
 
-    static class Graph {
-
-        private final Set<Node> nodes = new HashSet<>();
-
-        public void addNode(Node nodeA) {
-            nodes.add(nodeA);
-        }
-
-        public Node startNode() {
-            return nodes.stream().filter(it -> it.isStart).findFirst().orElseThrow();
-        }
-    }
-
     static class WeightedNode implements Comparable<WeightedNode> {
 
         private final Node point;
@@ -123,30 +116,27 @@ public class Day12Solution {
         @SuppressWarnings("unused")
         private final int y;
 
-        private final boolean isStart;
-
         private final boolean isEnd;
 
         private final List<Node> adjacentNodes = new ArrayList<>();
 
-        public Node(char elevation, int x, int y, boolean isStart, boolean isEnd) {
+        public Node(char elevation, int x, int y, boolean isEnd) {
             this.elevation = elevation;
             this.x = x;
             this.y = y;
-            this.isStart = isStart;
             this.isEnd = isEnd;
         }
 
         static Node start(int x, int y) {
-            return new Node('a', x, y, true, false);
+            return new Node('a', x, y, false);
         }
 
         static Node end(int x, int y) {
-            return new Node('z', x, y, false, true);
+            return new Node('z', x, y, true);
         }
 
         public static Node make(char elevation, int i, int j) {
-            return new Node(elevation, i, j, false, false);
+            return new Node(elevation, i, j, false);
         }
 
         @Override

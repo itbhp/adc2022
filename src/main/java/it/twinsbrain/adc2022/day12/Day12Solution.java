@@ -10,6 +10,11 @@ public class Day12Solution {
         return grid.howManyStepsToGetSignal();
     }
 
+    public static int part2(List<String> input) {
+        Grid grid = parse(input);
+        return grid.shortestPathToBestSignal();
+    }
+
     static class Grid {
         public final Node[][] grid;
         public Node start;
@@ -37,7 +42,7 @@ public class Day12Solution {
                     addNeighbours(node, i, j);
                 }
             }
-            return calculateShortestPathFromSource(start);
+            return calculateShortestPathFromSource(start).orElse(0);
         }
 
         private Node makeNode(char elevation, int i, int j) {
@@ -66,9 +71,20 @@ public class Day12Solution {
                     .filter(it -> it != j)
                     .forEach(y -> node.addAdjacentNode(grid[i][y]));
         }
+
+        public int shortestPathToBestSignal() {
+            return Arrays.stream(grid)
+                    .flatMap(Arrays::stream)
+                    .filter(it -> it.elevation == 'a')
+                    .map(Day12Solution::calculateShortestPathFromSource)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .mapToInt(Integer::intValue)
+                    .min().orElse(0);
+        }
     }
 
-    public static int calculateShortestPathFromSource(Node source) {
+    public static Optional<Integer> calculateShortestPathFromSource(Node source) {
         Set<Node> visited = new HashSet<>();
         Queue<WeightedNode> queue = new LinkedList<>();
 
@@ -77,7 +93,7 @@ public class Day12Solution {
         while (!queue.isEmpty()) {
             WeightedNode current = queue.poll();
 
-            if (current.point.isEnd) return current.totalDistance;
+            if (current.point.isEnd) return Optional.of(current.totalDistance);
 
             if (!visited.contains(current.point)) {
                 visited.add(current.point);
@@ -86,8 +102,7 @@ public class Day12Solution {
                         .forEach(adj -> queue.offer(new WeightedNode(adj, current.totalDistance + 1)));
             }
         }
-
-        throw new IllegalStateException("End not reached");
+        return Optional.empty();
     }
 
     static class WeightedNode implements Comparable<WeightedNode> {

@@ -21,7 +21,7 @@ public class Day12Solution {
     }
 
     static class Grid {
-        public Node[][] grid;
+        public final Node[][] grid;
 
         public Grid(int numberOfRows) {
             grid = new Node[numberOfRows][];
@@ -74,7 +74,7 @@ public class Day12Solution {
 
     public static int calculateShortestPathFromSource(Node source) {
         Set<Node> visited = new HashSet<>();
-        PriorityQueue<WeightedNode> queue = new PriorityQueue<>();
+        Queue<WeightedNode> queue = new LinkedList<>();
 
         queue.add(new WeightedNode(source, 0));
 
@@ -83,11 +83,11 @@ public class Day12Solution {
 
             if (current.point.isEnd) return current.totalDistance;
 
-            if (!visited.contains(current.point)){
+            if (!visited.contains(current.point)) {
                 visited.add(current.point);
-                current.point.getAdjacentNodes().forEach(adj -> {
-                    queue.offer(new WeightedNode(adj, current.totalDistance + 1));
-                });
+                current.point
+                        .getAdjacentNodes()
+                        .forEach(adj -> queue.offer(new WeightedNode(adj, current.totalDistance + 1)));
             }
         }
 
@@ -107,14 +107,12 @@ public class Day12Solution {
         }
     }
 
-
-
     static class WeightedNode implements Comparable<WeightedNode> {
 
-        private Node point;
-        private Integer totalDistance;
+        private final Node point;
+        private final Integer totalDistance;
 
-        WeightedNode(Node point, Integer totalDistance){
+        WeightedNode(Node point, Integer totalDistance) {
             this.point = point;
             this.totalDistance = totalDistance;
         }
@@ -163,7 +161,7 @@ public class Day12Solution {
 
         @Override
         public String toString() {
-            return "" + elevation;
+            return String.valueOf(elevation);
         }
 
         public List<Node> getAdjacentNodes() {
@@ -171,14 +169,14 @@ public class Day12Solution {
         }
 
         public void addAdjacentNode(Node destination) {
-            if (sameHeightOrOneShorter(destination)) {
+            if (isGoodCandidate(destination)) {
                 adjacentNodes.add(destination);
             }
         }
 
-        private boolean sameHeightOrOneShorter(Node target) {
-            int gap = ((int) target.elevation) - ((int) elevation);
-            return gap == 1 || gap == 0;
+        private boolean isGoodCandidate(Node target) {
+            int gap = target.elevation - elevation;
+            return Math.abs(gap) <= 1;
         }
     }
 

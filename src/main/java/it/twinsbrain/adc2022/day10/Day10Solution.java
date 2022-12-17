@@ -1,6 +1,5 @@
 package it.twinsbrain.adc2022.day10;
 
-import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -9,18 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static it.twinsbrain.adc2022.FilesModule.read;
-import static it.twinsbrain.adc2022.FilesModule.resource;
-
 public class Day10Solution {
-
-    public static void main(String[] args) throws URISyntaxException {
-        var input = read(resource("/day10/input.txt"));
-        System.out.printf("Part 1: %s", part1(input));
-        System.out.println();
-        System.out.println("Part 2");
-        part2(input); // PLPAFBCL
-    }
 
     public static int part1(List<String> input) {
         var cyclesForSignalStrength = List.of(20, 60, 100, 140, 180, 220);

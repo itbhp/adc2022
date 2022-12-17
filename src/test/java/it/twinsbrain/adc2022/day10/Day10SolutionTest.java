@@ -1,22 +1,16 @@
 package it.twinsbrain.adc2022.day10;
 
-import it.twinsbrain.adc2022.day10.Day10Solution.Add;
-import it.twinsbrain.adc2022.day10.Day10Solution.NoOp;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.net.URISyntaxException;
-import java.util.List;
-
-import static it.twinsbrain.adc2022.FilesModule.read;
-import static it.twinsbrain.adc2022.FilesModule.resource;
-import static it.twinsbrain.adc2022.day10.Day10Solution.parse;
-import static it.twinsbrain.adc2022.day10.Day10Solution.part1;
+import static it.twinsbrain.adc2022.FixtureModule.readSample;
+import static it.twinsbrain.adc2022.day10.Day10Solution.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 class Day10SolutionTest {
+
+    private final static List<String> acceptanceInput = readSample("day10");
 
     @Test
     void parse_should_work() {
@@ -49,22 +43,13 @@ class Day10SolutionTest {
         assertThat(part1(input), equalTo(7200));
     }
 
-    @Nested
-    class AcceptanceTest {
+    @Test
+    void acceptanceTestPart1() {
+        assertThat(part1(acceptanceInput), equalTo(13140));
+    }
 
-        private static final List<String> input;
-
-        static {
-            try {
-                input = read(resource("/day10/input.txt"));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException("input file not found!");
-            }
-        }
-
-        @Test
-        void part1Test() {
-            assertThat(part1(input), Matchers.equalTo(12560));
-        }
+    @Test
+    void acceptanceTestPart2() {
+        part2(acceptanceInput);
     }
 }

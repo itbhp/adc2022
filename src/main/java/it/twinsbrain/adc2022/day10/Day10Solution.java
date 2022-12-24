@@ -67,27 +67,22 @@ public class Day10Solution {
     static class Cpu {
         private final CpuObserver observer;
         private int registerX = 1;
-        private Instruction currentInstruction;
-        private boolean pendingInstruction = false;
+        private Add currentInstruction;
 
         public Cpu(CpuObserver observer) {
             this.observer = observer;
         }
 
         public boolean canProcessNextInstruction() {
-            return !pendingInstruction;
+            return currentInstruction == null;
         }
 
         public void execute(int cycle, Instruction instruction) {
-            currentInstruction = instruction;
-            if (currentInstruction != null) {
-                switch (currentInstruction) {
-                    case Add ignored -> pendingInstruction = true;
-                    case NoOp ignoredNoOp -> pendingInstruction = false;
+            if (instruction != null) {
+                switch (instruction) {
+                    case Add i -> currentInstruction = i;
+                    case NoOp ignoredNoOp -> currentInstruction = null;
                 }
-            }
-            if (!pendingInstruction) {
-                currentInstruction = null;
             }
             observer.onExecute(cycle, registerX);
         }
@@ -95,15 +90,7 @@ public class Day10Solution {
         public void execute(int cycle) {
             observer.onExecute(cycle, registerX);
             if (currentInstruction != null) {
-                switch (currentInstruction) {
-                    case Add add -> {
-                        registerX = registerX + add.value;
-                        pendingInstruction = false;
-                    }
-                    case NoOp ignored -> pendingInstruction = false;
-                }
-            }
-            if (!pendingInstruction) {
+                registerX = registerX + currentInstruction.value;
                 currentInstruction = null;
             }
         }

@@ -2,7 +2,6 @@ package it.twinsbrain.adc2022.day10;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -68,7 +67,7 @@ public class Day10Solution {
     static class Cpu {
         private final CpuObserver observer;
         private int registerX = 1;
-        private Optional<Instruction> currentInstruction = Optional.empty();
+        private Instruction currentInstruction;
         private boolean pendingInstruction = false;
 
         public Cpu(CpuObserver observer) {
@@ -80,32 +79,32 @@ public class Day10Solution {
         }
 
         public void execute(int cycle, Instruction instruction) {
-            currentInstruction = Optional.ofNullable(instruction);
-            currentInstruction.ifPresent(i -> {
-                switch (i) {
+            currentInstruction = instruction;
+            if (currentInstruction != null) {
+                switch (currentInstruction) {
                     case Add ignored -> pendingInstruction = true;
                     case NoOp ignoredNoOp -> pendingInstruction = false;
                 }
-            });
+            }
             if (!pendingInstruction) {
-                currentInstruction = Optional.empty();
+                currentInstruction = null;
             }
             observer.onExecute(cycle, registerX);
         }
 
         public void execute(int cycle) {
             observer.onExecute(cycle, registerX);
-            currentInstruction.ifPresent(current -> {
-                switch (current) {
+            if (currentInstruction != null) {
+                switch (currentInstruction) {
                     case Add add -> {
                         registerX = registerX + add.value;
                         pendingInstruction = false;
                     }
                     case NoOp ignored -> pendingInstruction = false;
                 }
-            });
+            }
             if (!pendingInstruction) {
-                currentInstruction = Optional.empty();
+                currentInstruction = null;
             }
         }
     }
@@ -126,7 +125,7 @@ public class Day10Solution {
             }
             int cursorPos = cycleCount % DISPLAY_MAX_COLUMNS;
             if (cursorInSpriteRange(registerValue, cursorPos)) {
-                System.out.print("\u2588");
+                System.out.print("█");
             } else {
                 System.out.print(" ");
             }

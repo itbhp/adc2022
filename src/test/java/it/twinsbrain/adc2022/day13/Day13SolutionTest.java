@@ -1,15 +1,17 @@
 package it.twinsbrain.adc2022.day13;
 
-import static it.twinsbrain.adc2022.FixtureModule.readSample;
 import it.twinsbrain.adc2022.day13.Day13Solution.MultipleItems;
 import it.twinsbrain.adc2022.day13.Day13Solution.Packet;
 import it.twinsbrain.adc2022.day13.Day13Solution.PacketItem;
 import it.twinsbrain.adc2022.day13.Day13Solution.SingleItem;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
+import static it.twinsbrain.adc2022.FixtureModule.readSample;
+import static it.twinsbrain.adc2022.day13.Day13Solution.parse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 class Day13SolutionTest {
 
@@ -58,7 +60,8 @@ class Day13SolutionTest {
                 seventhPacket,
                 eightPacket
         );
-        assertThat(Day13Solution.parse(sampleInput), equalTo(expected));
+        List<Packet> parsedPackets = parse(sampleInput);
+        assertThat(parsedPackets, equalTo(expected));
     }
 
     private static MultipleItems m(PacketItem... values) {

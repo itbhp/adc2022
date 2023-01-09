@@ -17,47 +17,33 @@ public class Day13Solution {
     private static Packet toPacket(List<String> strings) {
         var left = strings.get(0);
         var right = strings.get(1);
-        Packet packet = new Packet(toItems(left), toItems(right));
-        return packet;
+        return new Packet(toItems(left), toItems(right));
     }
 
     private static MultipleItems toItems(String source) {
-        var chars = source;
-        var items = new ArrayList<PacketItem>();
-        PacketItem current = null;
-        var stack = new Stack<Character>();
-        for (int i = 0; i < chars.length(); i++) {
-            String c = chars.substring(i, i + 1);
+        MultipleItems result = new MultipleItems();
+        MultipleItems container = result;
+        var stack = new Stack<MultipleItems>();
+        stack.add(container);
+        for (int i = 1; i < source.length() - 1; i++) {
+            String c = source.substring(i, i + 1);
             switch (c) {
-                case "[" -> stack.add('[');
-                case "]" -> stack.pop();
+                case "[" -> {
+                    var newCurrent = new MultipleItems();
+                    container.addItem(newCurrent);
+                    container = newCurrent;
+                    stack.add(container);
+                }
+                case "]" -> {
+                    stack.pop();
+                    container = stack.peek();
+                }
                 case "," -> {
-                    continue;
                 }
-                default -> {
-                    if (current == null) {
-                        current = new SingleItem(Integer.parseInt(c));
-                    } else {
-                        switch (current) {
-                            case MultipleItems multipleItems -> {
-                                multipleItems.addItem(new SingleItem(Integer.parseInt(c)));
-                            }
-                            case SingleItem singleItem -> {
-                                var newCurrent = new MultipleItems();
-                                newCurrent.addItem(singleItem);
-                                newCurrent.addItem(new SingleItem(Integer.parseInt(c)));
-                                current = newCurrent;
-                            }
-                        }
-                    }
-                }
-            }
-            if (stack.isEmpty()) {
-                items.add(current);
-                current = null;
+                default -> container.addItem(new SingleItem(Integer.parseInt(c)));
             }
         }
-        return new MultipleItems(items);
+        return result;
     }
 
 
@@ -71,7 +57,7 @@ public class Day13Solution {
     }
 
     static final class MultipleItems implements PacketItem {
-        private List<PacketItem> items;
+        private final List<PacketItem> items;
 
         public MultipleItems() {
             this(new ArrayList<>());
@@ -83,10 +69,6 @@ public class Day13Solution {
 
         public void addItem(PacketItem item) {
             items.add(item);
-        }
-
-        public List<PacketItem> getItems() {
-            return items;
         }
 
         @Override
@@ -104,12 +86,7 @@ public class Day13Solution {
 
         @Override
         public String toString() {
-            return "MultipleItems[" +
-                    items.stream()
-                            .map(PacketItem::toString)
-                            .reduce((a, b) -> a + "," + b)
-                            .orElse("")
-                    + "]";
+            return "MultipleItems[" + items.stream().map(PacketItem::toString).reduce((a, b) -> a + "," + b).orElse("") + "]";
         }
     }
 }

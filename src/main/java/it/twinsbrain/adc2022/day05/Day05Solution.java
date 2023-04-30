@@ -7,7 +7,6 @@ import static it.twinsbrain.adc2022.GroupingModule.chunked;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -26,12 +25,12 @@ public class Day05Solution {
 
   private static void part2ApplyCommands(
       List<LinkedList<String>> cratesColumns, List<Command> commands) {
-    for (Command command : commands) {
-      var from = cratesColumns.get(command.from - 1);
-      var to = cratesColumns.get(command.to - 1);
+    for (Command(int howMany, int from, int to) : commands) {
+      var fromColumn = cratesColumns.get(from - 1);
+      var toColumn = cratesColumns.get(to - 1);
       var stack = new LinkedList<String>();
-      swap(from, stack, command.howMany);
-      swap(stack, to, command.howMany);
+      swap(fromColumn, stack, howMany);
+      swap(stack, toColumn, howMany);
     }
   }
 
@@ -41,10 +40,10 @@ public class Day05Solution {
 
   private static void part1ApplyCommands(
       List<LinkedList<String>> cratesColumns, List<Command> commands) {
-    for (Command command : commands) {
-      var from = cratesColumns.get(command.from - 1);
-      var to = cratesColumns.get(command.to - 1);
-      swap(from, to, command.howMany);
+    for (Command(int howMany, int from, int to) : commands) {
+      var fromColumn = cratesColumns.get(from - 1);
+      var toColumn = cratesColumns.get(to - 1);
+      swap(fromColumn, toColumn, howMany);
     }
   }
 
@@ -77,7 +76,7 @@ public class Day05Solution {
             line -> {
               var matcher = regexp.matcher(line);
               if (matcher.matches()) {
-                Command command =
+                var command =
                     new Command(
                         Integer.parseInt(matcher.group(1)),
                         Integer.parseInt(matcher.group(2)),
@@ -96,7 +95,7 @@ public class Day05Solution {
     var cratesColumns = computeCratesColumns(input.get(0));
     var crates = newArrayList(cratesColumns);
     var regexp = Pattern.compile("\\[([A-Z])]\\s?");
-    BiConsumer<Integer, String> addElemToCrates = (Integer i, String id) -> crates.get(i).add(id);
+    BiConsumer<Integer, String> addElemToCrates = (i, id) -> crates.get(i).add(id);
     input.stream()
         .takeWhile(row -> !row.matches("\\.*\\d+\\.*"))
         .forEach(line -> addColumnItemsToCrates(regexp, addElemToCrates, line));
@@ -105,11 +104,11 @@ public class Day05Solution {
 
   private static void addColumnItemsToCrates(
       Pattern regexp, BiConsumer<Integer, String> addElemToCrates, String line) {
-    List<String> columnsItems = chunked(line, 4).toList();
+    var columnsItems = chunked(line, 4).toList();
     for (int i = 0; i < columnsItems.size(); i++) {
       var columnItem = columnsItems.get(i);
       if (columnItem.trim().length() > 0) {
-        Matcher matcher = regexp.matcher(columnItem);
+        var matcher = regexp.matcher(columnItem);
         if (matcher.matches()) {
           var id = matcher.group(1);
           addElemToCrates.accept(i, id);
@@ -119,13 +118,13 @@ public class Day05Solution {
   }
 
   private static int computeCratesColumns(String row) {
-    int length = row.length();
-    int div = length / 4;
+    var length = row.length();
+    var div = length / 4;
     return div * 4 == length ? div : div + 1;
   }
 
   private static ArrayList<LinkedList<String>> newArrayList(int cratesColumns) {
-    ArrayList<LinkedList<String>> linkedLists = new ArrayList<>(cratesColumns);
+    var linkedLists = new ArrayList<LinkedList<String>>(cratesColumns);
     for (int i = 0; i < cratesColumns; i++) {
       linkedLists.add(new LinkedList<>());
     }

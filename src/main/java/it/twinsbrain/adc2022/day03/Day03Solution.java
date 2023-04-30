@@ -17,7 +17,7 @@ public class Day03Solution {
   static {
     record Pair(char c, int index) {}
 
-    AtomicInteger count = new AtomicInteger(1);
+    var count = new AtomicInteger(1);
     weights =
         IntStream.concat(IntStream.range(97, 123), IntStream.range(65, 91))
             .mapToObj(i -> new Pair((char) i, count.getAndIncrement()))
@@ -63,11 +63,11 @@ public class Day03Solution {
   }
 
   private static String representativeChar(List<String> elvesItems) {
-    List<Set<Character>> chars = elvesItems.stream().map(Day03Solution::charactersSet).toList();
+    var chars = elvesItems.stream().map(Day03Solution::charactersSet).toList();
     var firstElfItems = chars.get(0);
     var secondElfItems = chars.get(1);
     var thirdElfItems = chars.get(2);
-    for (Character c : thirdElfItems) {
+    for (var c : thirdElfItems) {
       if (firstElfItems.contains(c) && secondElfItems.contains(c)) {
         return String.valueOf(c);
       }

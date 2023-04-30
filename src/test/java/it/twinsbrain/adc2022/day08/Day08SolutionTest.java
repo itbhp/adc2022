@@ -18,7 +18,7 @@ class Day08SolutionTest {
   void itShouldParseTheGrid() {
     var input = List.of("30373", "25512", "65332", "33549", "35390");
 
-    int[][] expected =
+    var expected =
         new int[][] {
           {3, 0, 3, 7, 3},
           {2, 5, 5, 1, 2},

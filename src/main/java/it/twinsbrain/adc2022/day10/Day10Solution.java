@@ -11,7 +11,7 @@ public class Day10Solution {
 
   public static int part1(List<String> input) {
     var cyclesForSignalStrength = List.of(20, 60, 100, 140, 180, 220);
-    Queue<Instruction> instructions = parse(input);
+    var instructions = parse(input);
     return signalStrength(cyclesForSignalStrength, instructions);
   }
 
@@ -24,7 +24,7 @@ public class Day10Solution {
   }
 
   public static void part2(List<String> input) {
-    Queue<Instruction> instructions = parse(input);
+    var instructions = parse(input);
     var observer = new DisplayObserver();
     var cpu = new Cpu(observer);
     startProcessingUpToNCyclesCount(instructions, 241, cpu);

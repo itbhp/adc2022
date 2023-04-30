@@ -26,9 +26,9 @@ public class Day06Solution {
   }
 
   private static int findMarker(List<String> input, int size) {
-    String buffer = input.get(0);
+    var buffer = input.get(0);
     var window = new DistinctElementsWindow(size);
-    AtomicInteger index = new AtomicInteger(1);
+    var index = new AtomicInteger(1);
     buffer
         .chars()
         .mapToObj(i -> (char) i)

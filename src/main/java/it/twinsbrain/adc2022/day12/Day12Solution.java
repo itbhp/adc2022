@@ -6,13 +6,11 @@ import java.util.stream.IntStream;
 public class Day12Solution {
 
   public static int part1(List<String> input) {
-    Grid grid = parse(input);
-    return grid.howManyStepsToGetSignal();
+    return parse(input).howManyStepsToGetSignal();
   }
 
   public static int part2(List<String> input) {
-    Grid grid = parse(input);
-    return grid.shortestPathToBestSignal();
+    return parse(input).shortestPathToBestSignal();
   }
 
   static class Grid {
@@ -25,10 +23,10 @@ public class Day12Solution {
     }
 
     public void acceptRow(int rowNumber, String line) {
-      Node[] row = new Node[line.length()];
-      String[] split = line.split("");
+      var row = new Node[line.length()];
+      var split = line.split("");
       for (int i = 0; i < split.length; i++) {
-        String s = split[i];
+        var s = split[i];
         row[i] = makeNode(s.charAt(0), rowNumber, i);
       }
       grid[rowNumber] = row;
@@ -80,7 +78,7 @@ public class Day12Solution {
     public void fillNeighbours() {
       for (int i = 0; i < grid.length; i++) {
         for (int j = 0; j < grid[i].length; j++) {
-          Node node = grid[i][j];
+          var node = grid[i][j];
           addNeighbours(node, i, j);
         }
       }
@@ -88,13 +86,13 @@ public class Day12Solution {
   }
 
   public static Optional<Integer> calculateShortestPathFromSource(Node source) {
-    Set<Node> visited = new HashSet<>();
-    Queue<WeightedNode> queue = new LinkedList<>();
+    var visited = new HashSet<Node>();
+    var queue = new LinkedList<WeightedNode>();
 
     queue.add(new WeightedNode(source, 0));
 
     while (!queue.isEmpty()) {
-      WeightedNode current = queue.poll();
+      var current = queue.poll();
 
       if (current.point.isEnd) return Optional.of(current.totalDistance);
 
@@ -183,7 +181,7 @@ public class Day12Solution {
     var rows = input.size();
     var grid = new Grid(rows);
     for (int j = 0; j < input.size(); j++) {
-      String line = input.get(j);
+      var line = input.get(j);
       grid.acceptRow(j, line);
     }
     grid.fillNeighbours();

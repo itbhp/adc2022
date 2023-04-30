@@ -6,7 +6,6 @@ import static it.twinsbrain.adc2022.day05.Day05Solution.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import it.twinsbrain.adc2022.day05.Day05Solution.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,7 +17,7 @@ class Day05SolutionTest {
 
   @Test
   void parseCratesStacks() {
-    List<String> input =
+    var input =
         List.of(
             "        [H]     [W] [B]           ",
             "    [D] [B]     [L] [G] [N]       ",
@@ -146,7 +145,7 @@ class Day05SolutionTest {
 
   @Test
   void parseCommands() {
-    List<String> input =
+    var input =
         List.of(
             "        [H]     [W] [B]           ",
             "    [D] [B]     [L] [G] [N]       ",
@@ -169,7 +168,7 @@ class Day05SolutionTest {
 
   @Test
   void part1ShouldWork() {
-    List<String> input =
+    var input =
         List.of(
             "        [H]     [W] [B]           ",
             "    [D] [B]     [L] [G] [N]       ",

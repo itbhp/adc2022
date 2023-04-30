@@ -30,14 +30,14 @@ public class Day04Solution {
   }
 
   private static boolean overlapping(Pair pair) {
-    Range first = pair.first;
-    Range second = pair.second;
+    var first = pair.first;
+    var second = pair.second;
     return first.overlaps(second);
   }
 
   private static boolean fullyContaining(Pair pair) {
-    Range first = pair.first;
-    Range second = pair.second;
+    var first = pair.first;
+    var second = pair.second;
     return first.fullyContains(second) || second.fullyContains(first);
   }
 
@@ -62,8 +62,8 @@ public class Day04Solution {
 
   private static Pair toRangesPair(String line) {
     var parts = line.split(",");
-    Range first = toRange(parts[0].split("-"));
-    Range second = toRange(parts[1].split("-"));
+    var first = toRange(parts[0].split("-"));
+    var second = toRange(parts[1].split("-"));
     return new Pair(first, second);
   }
 

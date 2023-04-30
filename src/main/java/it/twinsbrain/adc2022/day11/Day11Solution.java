@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.Function;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
@@ -119,8 +118,8 @@ public class Day11Solution {
   }
 
   private static long[] itemsWorryLevels(List<String> strings) {
-    String[] items = strings.get(1).replaceAll(" {2}Starting items: ", "").split(",");
-    long[] result = new long[items.length];
+    var items = strings.get(1).replaceAll(" {2}Starting items: ", "").split(",");
+    var result = new long[items.length];
     for (int i = 0; i < items.length; i++) {
       result[i] = Long.parseLong(items[i].trim());
     }
@@ -132,18 +131,18 @@ public class Day11Solution {
   }
 
   private static Function<Long, Long> toUpdateWorryLevelFunction(String s) {
-    String update = s.replaceAll(" {2}Operation: new = ", "");
-    Matcher updateMatcher = updatePattern.matcher(update);
+    var update = s.replaceAll(" {2}Operation: new = ", "");
+    var updateMatcher = updatePattern.matcher(update);
     updateMatcher.find();
     if (updateMatcher.group(1).equals("+")) {
-      String operand = updateMatcher.group(2);
+      var operand = updateMatcher.group(2);
       if (operand.equals("old")) {
         return it -> it + it;
       } else {
         return it -> it + Long.parseLong(operand);
       }
     } else if (updateMatcher.group(1).equals("*")) {
-      String operand = updateMatcher.group(2);
+      var operand = updateMatcher.group(2);
       if (operand.equals("old")) {
         return it -> it * it;
       } else {

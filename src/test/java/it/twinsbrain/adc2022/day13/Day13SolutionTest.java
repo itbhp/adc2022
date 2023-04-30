@@ -19,33 +19,31 @@ class Day13SolutionTest {
 
   @Test
   void parse_not_nested_should_work() {
-    Packet expected = new Packet(m(s(1), s(1), s(3), s(1), s(1)), m(s(1), s(1), s(5), s(1), s(1)));
+    var expected = new Packet(m(s(1), s(1), s(3), s(1), s(1)), m(s(1), s(1), s(5), s(1), s(1)));
 
-    List<String> input = List.of("[1,1,3,1,1]", "[1,1,5,1,1]", "");
+    var input = List.of("[1,1,3,1,1]", "[1,1,5,1,1]", "");
     assertThat(parse(input), equalTo(List.of(expected)));
   }
 
   @Test
   void parse_nested_should_work() {
-    Packet expected = new Packet(m(m(s(1)), m(s(2), s(3), s(4))), m(m(s(1)), s(4)));
+    var expected = new Packet(m(m(s(1)), m(s(2), s(3), s(4))), m(m(s(1)), s(4)));
 
-    List<String> input = List.of("[[1],[2,3,4]]", "[[1],4]", "");
+    var input = List.of("[[1],[2,3,4]]", "[[1],4]", "");
 
     assertThat(parse(input), equalTo(List.of(expected)));
   }
 
   @Test
   void parse_sample_should_work() {
-    Packet firstPacket =
-        new Packet(m(s(1), s(1), s(3), s(1), s(1)), m(s(1), s(1), s(5), s(1), s(1)));
-    Packet secondPacket = new Packet(m(m(s(1)), m(s(2), s(3), s(4))), m(m(s(1)), s(4)));
-    Packet thirdPacket = new Packet(m(s(9)), m(m(s(8), s(7), s(6))));
-    Packet fourthPacket =
-        new Packet(m(m(s(4), s(4)), s(4), s(4)), m(m(s(4), s(4)), s(4), s(4), s(4)));
-    Packet fifthPacket = new Packet(m(s(7), s(7), s(7), s(7)), m(s(7), s(7), s(7)));
-    Packet sixthPacket = new Packet(m(), m(s(3)));
-    Packet seventhPacket = new Packet(m(m(m())), m(m()));
-    Packet eightPacket =
+    var firstPacket = new Packet(m(s(1), s(1), s(3), s(1), s(1)), m(s(1), s(1), s(5), s(1), s(1)));
+    var secondPacket = new Packet(m(m(s(1)), m(s(2), s(3), s(4))), m(m(s(1)), s(4)));
+    var thirdPacket = new Packet(m(s(9)), m(m(s(8), s(7), s(6))));
+    var fourthPacket = new Packet(m(m(s(4), s(4)), s(4), s(4)), m(m(s(4), s(4)), s(4), s(4), s(4)));
+    var fifthPacket = new Packet(m(s(7), s(7), s(7), s(7)), m(s(7), s(7), s(7)));
+    var sixthPacket = new Packet(m(), m(s(3)));
+    var seventhPacket = new Packet(m(m(m())), m(m()));
+    var eightPacket =
         new Packet(
             m(s(1), m(s(2), m(s(3), m(s(4), m(s(5), s(6), s(7))))), s(8), s(9)),
             m(s(1), m(s(2), m(s(3), m(s(4), m(s(5), s(6), s(0))))), s(8), s(9)));

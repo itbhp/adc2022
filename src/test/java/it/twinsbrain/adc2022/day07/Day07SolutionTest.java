@@ -17,7 +17,7 @@ class Day07SolutionTest {
 
   @Test
   void testParsing() {
-    List<String> input =
+    var input =
         List.of(
             "$ cd /",
             "$ ls",
@@ -37,7 +37,7 @@ class Day07SolutionTest {
 
   @Test
   void dirSize() {
-    List<String> input =
+    var input =
         List.of(
             "$ cd /",
             "$ ls",
@@ -48,8 +48,6 @@ class Day07SolutionTest {
             "$ ls",
             "29116 f",
             "2557 g");
-
-    // 14848514 + 8504156 + 29116 + 2557
 
     var root = parse(input);
     assertThat(root.size(), equalTo(23384343));

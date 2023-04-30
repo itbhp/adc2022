@@ -21,12 +21,12 @@ public class Day13Solution {
   }
 
   private static MultipleItems toItems(String source) {
-    MultipleItems result = new MultipleItems();
-    MultipleItems container = result;
+    var result = new MultipleItems();
+    var container = result;
     var stack = new Stack<MultipleItems>();
     stack.add(container);
     for (int i = 1; i < source.length() - 1; i++) {
-      String c = source.substring(i, i + 1);
+      var c = source.substring(i, i + 1);
       switch (c) {
         case "[" -> {
           var newCurrent = new MultipleItems();
@@ -70,7 +70,7 @@ public class Day13Solution {
     public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
-      MultipleItems that = (MultipleItems) o;
+      var that = (MultipleItems) o;
       return Objects.equals(items, that.items);
     }
 

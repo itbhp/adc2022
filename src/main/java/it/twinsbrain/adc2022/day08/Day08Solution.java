@@ -19,9 +19,9 @@ public class Day08Solution {
   }
 
   public static int howManyTreesAreVisible(List<String> input) {
-    int[][] grid = parse(input);
-    int size = input.size();
-    AtomicInteger result = new AtomicInteger(0);
+    var grid = parse(input);
+    var size = input.size();
+    var result = new AtomicInteger(0);
 
     IntStream.range(0, size)
         .forEach(
@@ -30,14 +30,14 @@ public class Day08Solution {
                     .forEach(
                         j -> {
                           var candidate = grid[i][j];
-                          boolean visibleFromLeft =
+                          var visibleFromLeft =
                               isVisibleInRange(IntStream.range(0, j), candidate, (k) -> grid[i][k]);
-                          boolean visibleFromRight =
+                          var visibleFromRight =
                               isVisibleInRange(
                                   IntStream.range(j + 1, size), candidate, (k) -> grid[i][k]);
-                          boolean visibleFromUp =
+                          var visibleFromUp =
                               isVisibleInRange(IntStream.range(0, i), candidate, (k) -> grid[k][j]);
-                          boolean visibleFromDown =
+                          var visibleFromDown =
                               isVisibleInRange(
                                   IntStream.range(i + 1, size), candidate, (k) -> grid[k][j]);
                           if (visibleFromDown
@@ -51,9 +51,9 @@ public class Day08Solution {
   }
 
   public static int highestScenicScore(List<String> input) {
-    int[][] grid = parse(input);
-    int size = input.size();
-    AtomicInteger max = new AtomicInteger(Integer.MIN_VALUE);
+    var grid = parse(input);
+    var size = input.size();
+    var max = new AtomicInteger(Integer.MIN_VALUE);
 
     IntStream.range(0, size)
         .forEach(
@@ -62,10 +62,10 @@ public class Day08Solution {
                     .forEach(
                         j -> {
                           var candidate = grid[i][j];
-                          int scoreLeft = visibleFromLeft(j, candidate, k -> grid[i][k]);
-                          int scoreRight = visibleFromRight(size, j, candidate, k -> grid[i][k]);
-                          int scoreUp = visibleFromUp(i, candidate, k -> grid[k][j]);
-                          int scoreDown = visibleFromDown(size, i, candidate, k -> grid[k][j]);
+                          var scoreLeft = visibleFromLeft(j, candidate, k -> grid[i][k]);
+                          var scoreRight = visibleFromRight(size, j, candidate, k -> grid[i][k]);
+                          var scoreUp = visibleFromUp(i, candidate, k -> grid[k][j]);
+                          var scoreDown = visibleFromDown(size, i, candidate, k -> grid[k][j]);
                           var scenicScore = scoreDown * scoreUp * scoreLeft * scoreRight;
                           if (scenicScore > max.intValue()) {
                             max.set(scenicScore);

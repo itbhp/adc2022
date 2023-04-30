@@ -25,7 +25,7 @@ public class Day01Solution {
   }
 
   private static Stream<Integer> caloriesByElf(List<String> input) {
-    String[] caloriesByElf = String.join("\n", input).split("\n\n");
+    var caloriesByElf = String.join("\n", input).split("\n\n");
     return Arrays.stream(caloriesByElf).mapToInt(Day01Solution::singleElfCalories).boxed();
   }
 

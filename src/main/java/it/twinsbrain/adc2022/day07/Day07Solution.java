@@ -23,7 +23,7 @@ public class Day07Solution {
   }
 
   public static int part1(List<String> input) {
-    Directory root = parse(input);
+    var root = parse(input);
     final AtomicInteger sum = new AtomicInteger(0);
     Consumer<Directory> accumulator =
         dirToVisit -> {
@@ -36,10 +36,10 @@ public class Day07Solution {
   }
 
   public static int part2(List<String> input) {
-    Directory root = parse(input);
+    var root = parse(input);
     var currentAvailableSpace = 70_000_000 - root.size();
     var neededSpace = 30_000_000 - currentAvailableSpace;
-    final Queue<Directory> candidateDirToDelete = new ConcurrentLinkedQueue<>();
+    var candidateDirToDelete = new ConcurrentLinkedQueue<Directory>();
     Consumer<Directory> accumulator =
         dirToVisit -> {
           if (dirToVisit.size() >= neededSpace) {
@@ -62,8 +62,8 @@ public class Day07Solution {
 
   public static Directory parse(List<String> input) {
     var filePattern = Pattern.compile("(\\d+) (.*)");
-    Directory root = Directory.root();
-    Directory currentDir = root;
+    var root = Directory.root();
+    var currentDir = root;
     var iterator = input.iterator();
     iterator.next(); // skip root
     while (iterator.hasNext()) {
@@ -179,15 +179,15 @@ final class Directory implements FileSystem {
 
   @Override
   public String toString() {
-    StringBuilder res = new StringBuilder("[" + name + "]");
+    var res = new StringBuilder("[" + name + "]");
     if (!children.isEmpty()) {
-      Map<Boolean, List<FileSystem>> partitionWithDirs =
+      var partitionWithDirs =
           children.stream().collect(Collectors.partitioningBy(FileSystem::isDirectory));
       res.append("->");
       res.append("{");
       res.append(
           partitionWithDirs.get(false).stream().map(FileSystem::toString).collect(joining(",")));
-      List<FileSystem> subDirs = partitionWithDirs.get(true);
+      var subDirs = partitionWithDirs.get(true);
       if (subDirs.size() > 0) {
         res.append(",");
         res.append(subDirs.stream().map(FileSystem::toString).collect(joining(",")));

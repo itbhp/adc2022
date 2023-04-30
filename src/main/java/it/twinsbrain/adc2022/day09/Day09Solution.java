@@ -22,7 +22,7 @@ public class Day09Solution {
   }
 
   public static int tailPositions(List<String> input, int numberOfKnots) {
-    List<Command> commands = parseCommands(input);
+    var commands = parseCommands(input);
     var journey = new Journey(numberOfKnots);
     commands.forEach(journey::accept);
     return journey.howManyTailUniquePositions();
@@ -33,7 +33,7 @@ public class Day09Solution {
   }
 
   private static Command toCommand(String line) {
-    String[] parts = line.split(" ");
+    var parts = line.split(" ");
     return switch (parts[0]) {
       case "R" -> new Right(Integer.parseInt(parts[1]));
       case "L" -> new Left(Integer.parseInt(parts[1]));
@@ -93,7 +93,7 @@ public class Day09Solution {
         case Left steps -> IntStream.range(1, steps.amount + 1)
             .forEach(
                 step -> {
-                  Point head = queue.get(0);
+                  var head = queue.get(0);
                   queue.set(0, new Point(head.x - 1, head.y));
                   updateFollowers();
                   addTrail(queue.getLast());
@@ -101,7 +101,7 @@ public class Day09Solution {
         case Right steps -> IntStream.range(1, steps.amount + 1)
             .forEach(
                 step -> {
-                  Point head = queue.get(0);
+                  var head = queue.get(0);
                   queue.set(0, new Point(head.x + 1, head.y));
                   updateFollowers();
                   addTrail(queue.getLast());
@@ -109,7 +109,7 @@ public class Day09Solution {
         case Up steps -> IntStream.range(1, steps.amount + 1)
             .forEach(
                 step -> {
-                  Point head = queue.get(0);
+                  var head = queue.get(0);
                   queue.set(0, new Point(head.x, head.y - 1));
                   updateFollowers();
                   addTrail(queue.getLast());
@@ -117,7 +117,7 @@ public class Day09Solution {
         case Down steps -> IntStream.range(1, steps.amount + 1)
             .forEach(
                 step -> {
-                  Point head = queue.get(0);
+                  var head = queue.get(0);
                   queue.set(0, new Point(head.x, head.y + 1));
                   updateFollowers();
                   addTrail(queue.getLast());

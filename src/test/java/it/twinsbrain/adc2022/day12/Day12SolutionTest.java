@@ -1,28 +1,28 @@
 package it.twinsbrain.adc2022.day12;
 
-import it.twinsbrain.adc2022.FixtureModule;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
+import it.twinsbrain.adc2022.FixtureModule;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 class Day12SolutionTest {
 
-    @Nested
-    class AcceptanceTest {
+  @Nested
+  class AcceptanceTest {
 
-        private final static List<String> input = FixtureModule.readSample("day12");
+    private static final List<String> input = FixtureModule.readSample("day12");
 
-        @Test
-        void part1_should_work() {
-            assertThat(Day12Solution.part1(input), equalTo(31));
-        }
-
-        @Test
-        void part2_should_work() {
-            assertThat(Day12Solution.part2(input), equalTo(29));
-        }
+    @Test
+    void part1_should_work() {
+      assertThat(Day12Solution.part1(input), equalTo(31));
     }
+
+    @Test
+    void part2_should_work() {
+      assertThat(Day12Solution.part2(input), equalTo(29));
+    }
+  }
 }

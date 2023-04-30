@@ -12,15 +12,15 @@ import java.util.stream.Collectors;
 
 public class FilesModule {
 
-    public static URI resource(String fileName) throws URISyntaxException {
-        return Objects.requireNonNull(FilesModule.class.getResource(fileName)).toURI();
-    }
+  public static URI resource(String fileName) throws URISyntaxException {
+    return Objects.requireNonNull(FilesModule.class.getResource(fileName)).toURI();
+  }
 
-    public static List<String> read(URI fileName) {
-        try (var lines = Files.lines(Paths.get(fileName))) {
-            return lines.collect(Collectors.toList());
-        } catch (IOException e) {
-            return Collections.emptyList();
-        }
+  public static List<String> read(URI fileName) {
+    try (var lines = Files.lines(Paths.get(fileName))) {
+      return lines.collect(Collectors.toList());
+    } catch (IOException e) {
+      return Collections.emptyList();
     }
+  }
 }

@@ -4,14 +4,15 @@ import static it.twinsbrain.adc2022.GroupingModule.chunked;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Stack;
 
 public class Day13Solution {
 
   public static List<Packet> parse(List<String> input) {
-    return chunked(input, 3).stream().map(Day13Solution::toPacket).collect(toList());
+    return chunked(input, 3).stream().map(Day13Solution::toPacket)
+        .toList();
   }
 
   private static Packet toPacket(List<String> strings) {
@@ -23,23 +24,27 @@ public class Day13Solution {
   private static MultipleItems toItems(String source) {
     var result = new MultipleItems();
     var container = result;
-    var stack = new Stack<MultipleItems>();
-    stack.add(container);
+    var stack = new LinkedList<MultipleItems>();
+    stack.push(container);
     for (int i = 1; i < source.length() - 1; i++) {
       var c = source.substring(i, i + 1);
       switch (c) {
         case "[" -> {
           var newCurrent = new MultipleItems();
+          assert container != null;
           container.addItem(newCurrent);
           container = newCurrent;
-          stack.add(container);
+          stack.push(container);
         }
         case "]" -> {
           stack.pop();
           container = stack.peek();
         }
         case "," -> {}
-        default -> container.addItem(new SingleItem(Integer.parseInt(c)));
+        default -> {
+          assert container != null;
+          container.addItem(new it.twinsbrain.adc2022.day13.Day13Solution.SingleItem(Integer.parseInt(c)));
+        }
       }
     }
     return result;

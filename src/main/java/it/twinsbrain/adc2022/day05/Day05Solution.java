@@ -25,12 +25,12 @@ public class Day05Solution {
 
   private static void part2ApplyCommands(
       List<LinkedList<String>> cratesColumns, List<Command> commands) {
-    for (Command(int howMany, int from, int to) : commands) {
-      var fromColumn = cratesColumns.get(from - 1);
-      var toColumn = cratesColumns.get(to - 1);
+    for (Command command : commands) {
+      var fromColumn = cratesColumns.get(command.from - 1);
+      var toColumn = cratesColumns.get(command.to - 1);
       var stack = new LinkedList<String>();
-      swap(fromColumn, stack, howMany);
-      swap(stack, toColumn, howMany);
+      swap(fromColumn, stack, command.howMany);
+      swap(stack, toColumn, command.howMany);
     }
   }
 
@@ -40,10 +40,10 @@ public class Day05Solution {
 
   private static void part1ApplyCommands(
       List<LinkedList<String>> cratesColumns, List<Command> commands) {
-    for (Command(int howMany, int from, int to) : commands) {
-      var fromColumn = cratesColumns.get(from - 1);
-      var toColumn = cratesColumns.get(to - 1);
-      swap(fromColumn, toColumn, howMany);
+    for (Command command : commands) {
+      var fromColumn = cratesColumns.get(command.from - 1);
+      var toColumn = cratesColumns.get(command.to - 1);
+      swap(fromColumn, toColumn, command.howMany);
     }
   }
 
@@ -66,7 +66,8 @@ public class Day05Solution {
         .collect(Collectors.joining());
   }
 
-  record Command(int howMany, int from, int to) {}
+  public record Command(int howMany, int from, int to) {
+  }
 
   public static List<Command> parseCommands(List<String> input) {
     var regexp = Pattern.compile("move (\\d+) from (\\d+) to (\\d+)");
@@ -88,11 +89,11 @@ public class Day05Solution {
             })
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .collect(Collectors.toList());
+        .toList();
   }
 
-  public static ArrayList<LinkedList<String>> parseCrates(List<String> input) {
-    var cratesColumns = computeCratesColumns(input.get(0));
+  public static List<LinkedList<String>> parseCrates(List<String> input) {
+    var cratesColumns = computeCratesColumns(input.getFirst());
     var crates = newArrayList(cratesColumns);
     var regexp = Pattern.compile("\\[([A-Z])]\\s?");
     BiConsumer<Integer, String> addElemToCrates = (i, id) -> crates.get(i).add(id);
@@ -107,7 +108,7 @@ public class Day05Solution {
     var columnsItems = chunked(line, 4).toList();
     for (int i = 0; i < columnsItems.size(); i++) {
       var columnItem = columnsItems.get(i);
-      if (columnItem.trim().length() > 0) {
+      if (!columnItem.trim().isEmpty()) {
         var matcher = regexp.matcher(columnItem);
         if (matcher.matches()) {
           var id = matcher.group(1);
